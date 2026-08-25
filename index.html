@@ -3,29 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SAMIRA TRADERS - DMS V3</title>
+<title>SAMIRA TRADERS - DMS V3 FULL</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'SolaimanLipi','Segoe UI',sans-serif}
 body{background:#f1f5f9;color:#1e293b}
 .header{background:#0f172a;color:#fff;padding:15px;text-align:center;font-size:20px;font-weight:bold;position:sticky;top:0;z-index:10}
-.container{max-width:1000px;margin:10px auto;padding:10px}
+.container{max-width:1200px;margin:10px auto;padding:10px}
 .box{background:#fff;padding:15px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:12px}
 input,select,button{width:100%;padding:10px;margin:6px 0;border:1px solid #cbd5e1;border-radius:6px;font-size:14px}
 button{background:#2563eb;color:#fff;border:none;font-weight:bold;cursor:pointer}
 button:hover{background:#1d4ed8}
-.btn-danger{background:#dc2626}.btn-success{background:#16a34a}.btn-warning{background:#f59e0b}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-danger{background:#dc2626}.btn-success{background:#16a34a}.btn-warning{background:#f59e0b}.btn-info{background:#0ea5e9}
+.grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));gap:10px}
 table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
 th,td{border:1px solid #e2e8f0;padding:6px;text-align:center}
 th{background:#f8fafc;font-weight:bold}
 .total-row{background:#fef9c3;font-weight:bold}
 .hidden{display:none}
+.nav-btn{padding:8px;font-size:13px}
+.card{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8fafc;border-radius:8px;margin:5px 0}
 @media print{.no-print{display:none} body{background:#fff}.box{box-shadow:none;border:1px solid #ddd}}
 </style>
 </head>
 <body>
 
-<div class="header">SAMIRA TRADERS - DMS V3</div>
+<div class="header">SAMIRA TRADERS - DMS V3 FULL</div>
 
 <!-- LOGIN -->
 <div id="loginPage" class="container">
@@ -40,15 +42,51 @@ th{background:#f8fafc;font-weight:bold}
 <!-- DASHBOARD -->
 <div id="dashboard" class="container hidden">
   <div class="box no-print">
-    <h3>মেনু</h3>
+    <h3>মেইন মেনু</h3>
     <div class="grid">
-      <button onclick="loadSettlement()">DSR Settlement</button>
-      <button onclick="logout()" class="btn-danger">Logout</button>
+      <button class="nav-btn" onclick="showPage('dashboardHome')">Dashboard</button>
+      <button class="nav-btn" onclick="showPage('productPage')">Products</button>
+      <button class="nav-btn" onclick="showPage('customerPage')">Customers</button>
+      <button class="nav-btn" onclick="showPage('supplierPage')">Suppliers</button>
+      <button class="nav-btn" onclick="showPage('dsrPage')">DSR Settlement</button>
+      <button class="nav-btn" onclick="showPage('reportPage')">Reports</button>
+      <button class="nav-btn btn-danger" onclick="logout()">Logout</button>
     </div>
   </div>
 
-  <!-- DSR SETTLEMENT -->
-  <div id="dsrPage" class="box">
+  <!-- DASHBOARD HOME -->
+  <div id="dashboardHome" class="box">
+    <h3>Dashboard</h3>
+    <div class="grid">
+      <div class="card"><span>মোট প্রোডাক্ট</span><b id="totalProducts">0</b></div>
+      <div class="card"><span>মোট কাস্টমার</span><b id="totalCustomers">0</b></div>
+      <div class="card"><span>আজকের বিক্রি</span><b id="todaySales">0.00</b></div>
+      <div class="card"><span>মোট বাকি</span><b id="totalDue">0.00</b></div>
+    </div>
+  </div>
+
+  <!-- PRODUCT PAGE -->
+  <div id="productPage" class="box hidden">
+    <h3>Product Management</h3>
+    <button onclick="addProductForm()" class="no-print btn-success">+ নতুন প্রোডাক্ট</button>
+    <table id="productTable"><tr><th>নাম</th><th>ক্রয় মূল্য</th><th>বিক্রয় মূল্য</th><th>Stock</th></tr></table>
+  </div>
+
+  <!-- CUSTOMER PAGE -->
+  <div id="customerPage" class="box hidden">
+    <h3>Customer Management</h3>
+    <button onclick="addCustomerForm()" class="no-print btn-success">+ নতুন কাস্টমার</button>
+    <table id="customerTable"><tr><th>নাম</th><th>ঠিকানা</th><th>মোবাইল</th><th>Supplier</th></tr></table>
+  </div>
+
+  <!-- SUPPLIER PAGE -->
+  <div id="supplierPage" class="box hidden">
+    <h3>Supplier Management</h3>
+    <button onclick="addSupplierForm()" class="no-print btn-success">+ নতুন Supplier</button>
+    <table id="supplierTable"><tr><th>নাম</th><th>Contact</th></tr></table>
+  </div>
+  <!-- DSR SETTLEMENT - YOUR FORMULA -->
+  <div id="dsrPage" class="box hidden">
     <h3>DSR Evening Settlement Report</h3>
     <div class="grid">
       <input id="dsrDate" type="date">
@@ -76,14 +114,8 @@ th{background:#f8fafc;font-weight:bold}
     </div>
 
     <div class="grid">
-      <div>
-        <h4>4. Discount</h4>
-        <input id="discount" type="number" value="0" oninput="calculate()">
-      </div>
-      <div>
-        <h4>5. Expense</h4>
-        <input id="expense" type="number" value="0" oninput="calculate()">
-      </div>
+      <div><h4>4. Discount</h4><input id="discount" type="number" value="0" oninput="calculate()"></div>
+      <div><h4>5. Expense</h4><input id="expense" type="number" value="0" oninput="calculate()"></div>
     </div>
 
     <h4>6. Customer Due - Supplier Wise</h4>
@@ -97,7 +129,7 @@ th{background:#f8fafc;font-weight:bold}
       <p>ডিসকাউন্ট (-): <span id="totalDiscount">0.00</span></p>
       <p>ড্যামেজ (-): <span id="totalDamage">0.00</span></p>
       <p>খরচ (-): <span id="totalExpense">0.00</span></p>
-      <p>কাস্টমার বাকি (-): <span id="totalDue">0.00</span></p>
+      <p>কাস্টমার বাকি (-): <span id="totalDueCalc">0.00</span></p>
       <hr>
       <h3>DSR প্রদেয়: <span id="payable">0.00</span> টাকা</h3>
       <h4>Collection: <input id="collection" type="number" value="0" oninput="calculate()"></h4>
@@ -107,12 +139,20 @@ th{background:#f8fafc;font-weight:bold}
     <button onclick="saveData()" class="btn-success no-print">💾 Save to Firebase</button>
     <button onclick="window.print()" class="no-print">🖨️ Print / PDF</button>
   </div>
+
+  <!-- REPORT PAGE -->
+  <div id="reportPage" class="box hidden">
+    <h3>Reports</h3>
+    <button onclick="loadReport()" class="no-print btn-info">Report Load</button>
+    <div id="reportData"></div>
+  </div>
+
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// 1. FIREBASE CONFIG - আপনার টা বসান
+// 1. FIREBASE CONFIG - এখানে আপনার টা বসান বস
 const firebaseConfig = {
   apiKey: "AIzaSyYOUR_KEY",
   authDomain: "samira-dms.firebaseapp.com",
@@ -122,38 +162,56 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// 2. YOUR DATA FROM GITHUB
+// 2. YOUR FULL DATA FROM GITHUB
 const PRODUCTS = [
-  {id:"pIgsFeWzwoKF23ypE3QN", name:"Sandalina01", price:55, cost:50},
-  {id:"uxKzORFRn4itoXX2T8Hw", name:"smc plus", price:35, cost:30}
+  {id:"pIgsFeWzwoKF23ypE3QN", name:"Sandalina01", price:55, cost:50, stock:100},
+  {id:"uxKzORFRn4itoXX2T8Hw", name:"smc plus", price:35, cost:30, stock:200}
 ];
 const STAFF = [
   {name:"মনির ভাই", role:"DSR"}, {name:"আব্দুর রহমান ভাই", role:"DSR"},
-  {name:"মুসা ভাই", role:"DSR"}, {name:"মোঃ সুমন", role:"SR"}
+  {name:"মুসা ভাই", role:"DSR"}, {name:"মোঃ সুমন", role:"SR"}, {name:"আল-আমিন ভাই", role:"SR"}
 ];
-const ROUTES = [
-  {name:"বরগুনা সদর"}, {name:"লাকুরতলা"}
-];
+const ROUTES = [{name:"বরগুনা সদর"}, {name:"লাকুরতলা"}];
 const CUSTOMERS = [
-  {name:"আল-আমিন স্টোর"}, {name:"আল রাজী স্টোর"}, {name:"বিসমিল্লাহ স্টোর"}
+  {name:"আল-আমিন স্টোর", address:"বরগুনা", mobile:"017xx", supplier:"39kkwOSP9BmMqfLm8GU6"},
+  {name:"আল রাজী স্টোর", address:"লাকুরতলা", mobile:"018xx", supplier:"IZ105G9Bjo25chIq6BIO"}
 ];
 const SUPPLIERS = [
-  {id:"39kkwOSP9BmMqfLm8GU6", name:"আরলা ফুড বিডি লিঃ"},
-  {id:"IZ105G9Bjo25chIq6BIO", name:"কোহিনুর কেমিক্যাল"}
+  {id:"39kkwOSP9BmMqfLm8GU6", name:"আরলা ফুড বিডি লিঃ", contact:"017xx"},
+  {id:"IZ105G9Bjo25chIq6BIO", name:"কোহিনুর কেমিক্যাল", contact:"018xx"}
 ];
 
-// 3. LOGIN
+// 3. CORE FUNCTIONS
 function login(){
   if(username.value=='admin' && password.value=='1234'){
     loginPage.classList.add('hidden');
     dashboard.classList.remove('hidden');
     dsrDate.value=new Date().toISOString().split('T')[0];
-    loadDropdowns();
+    loadAllData();
   }else alert('ভুল ইউজার/পাসওয়ার্ড')
 }
 function logout(){location.reload()}
+function showPage(id){
+  document.querySelectorAll('#dashboard >.box').forEach(b=>b.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
 
-function loadDropdowns(){
+function loadAllData(){
+  // Load Products
+  productTable.innerHTML='<tr><th>নাম</th><th>ক্রয় মূল্য</th><th>বিক্রয় মূল্য</th><th>Stock</th></tr>';
+  PRODUCTS.forEach(p=>productTable.innerHTML+=`<tr><td>${p.name}</td><td>${p.cost}</td><td>${p.price}</td><td>${p.stock}</td></tr>`);
+  totalProducts.innerText=PRODUCTS.length;
+
+  // Load Customers
+  customerTable.innerHTML='<tr><th>নাম</th><th>ঠিকানা</th><th>মোবাইল</th><th>Supplier</th></tr>';
+  CUSTOMERS.forEach(c=>customerTable.innerHTML+=`<tr><td>${c.name}</td><td>${c.address}</td><td>${c.mobile}</td><td>${SUPPLIERS.find(s=>s.id==c.supplier)?.name}</td></tr>`);
+  totalCustomers.innerText=CUSTOMERS.length;
+
+  // Load Suppliers
+  supplierTable.innerHTML='<tr><th>নাম</th><th>Contact</th></tr>';
+  SUPPLIERS.forEach(s=>supplierTable.innerHTML+=`<tr><td>${s.name}</td><td>${s.contact}</td></tr>`);
+
+  // Load DSR Dropdowns
   ROUTES.forEach(r=>dsrRoute.innerHTML+=`<option>${r.name}</option>`);
   STAFF.filter(s=>s.role=='DSR').forEach(s=>dsrName.innerHTML+=`<option>${s.name}</option>`);
   addProductRow();
@@ -161,14 +219,13 @@ function loadDropdowns(){
 
 function addProductRow(){
   let options = PRODUCTS.map(p=>`<option value="${p.id}" data-price="${p.price}">${p.name}</option>`).join('');
-  let row = `<tr>
+  salesTable.innerHTML += `<tr>
     <td><select onchange="updateRate(this)">${options}</select></td>
     <td><input type="number" value="0" oninput="calculate()"></td>
     <td><input type="number" value="0" oninput="calculate()"></td>
     <td><input type="number" class="rate" value="${PRODUCTS[0].price}" readonly></td>
     <td class="salesVal">0.00</td>
   </tr>`;
-  salesTable.innerHTML += row;
 }
 function updateRate(sel){
   sel.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.querySelector('input').value = sel.selectedOptions[0].dataset.price;
@@ -189,10 +246,9 @@ function addCustomerDue(){
   customerDue.innerHTML += `<div class="grid"><select>${cust}</select><select>${supp}</select><input type="number" placeholder="টাকা" oninput="calculate()"></div>`;
 }
 
-// 4. MASTER CALCULATION ENGINE - YOUR FORMULA
+// 4. MASTER CALCULATION - YOUR EXACT FORMULA
 function calculate(){
   let gross=0, freeVal=0, damageVal=0, dueVal=0;
-
   [...salesTable.rows].slice(1).forEach(r=>{
     let assigned=Number(r.cells[1].querySelector('input').value)||0;
     let ret=Number(r.cells[2].querySelector('input').value)||0;
@@ -201,27 +257,18 @@ function calculate(){
     r.cells[4].innerText=sales.toFixed(2);
     gross+=sales;
   });
-
   [...freeItems.children].forEach(d=>{
     let qty=Number(d.children[1].value)||0;
     let name=d.children[0].value;
     let rate=PRODUCTS.find(p=>p.name==name)?.price || 0;
     freeVal+=qty*rate;
   });
-
-  [...damageItems.children].forEach(d=>{
-    damageVal+=Number(d.children[2].value)||0;
-  });
-
-  [...customerDue.children].forEach(d=>{
-    dueVal+=Number(d.children[2].value)||0;
-  });
+  [...damageItems.children].forEach(d=>{damageVal+=Number(d.children[2].value)||0;});
+  [...customerDue.children].forEach(d=>{dueVal+=Number(d.children[2].value)||0;});
 
   let discount=Number(discount.value)||0;
   let expense=Number(expense.value)||0;
   let collection=Number(collection.value)||0;
-
-  // Formula: Assigned-Return=Sales. Then - Free - Discount - Damage - Expense - Due = Payable
   let payable = gross - freeVal - discount - damageVal - expense - dueVal;
   let balance = payable - collection;
 
@@ -230,20 +277,27 @@ function calculate(){
   totalDamage.innerText=damageVal.toFixed(2);
   totalDiscount.innerText=discount.toFixed(2);
   totalExpense.innerText=expense.toFixed(2);
-  totalDue.innerText=dueVal.toFixed(2);
+  totalDueCalc.innerText=dueVal.toFixed(2);
   payable.innerText=payable.toFixed(2);
   balance.innerText=balance.toFixed(2);
+  todaySales.innerText=gross.toFixed(2);
 }
 
 // 5. SAVE TO FIREBASE
 function saveData(){
-  let data = {
+  let settlement = {
     date: dsrDate.value, route: dsrRoute.value, dsr: dsrName.value,
     gross: grossSales.innerText, payable: payable.innerText, balance: balance.innerText,
     timestamp: Date.now()
   };
-  db.ref('settlements/' + dsrDate.value + '/' + dsrName.value).set(data);
+  db.ref('settlements/' + dsrDate.value + '/' + dsrName.value).set(settlement);
   alert('Firebase এ Save হয়েছে বস ✅');
+}
+
+function loadReport(){
+  db.ref('settlements').once('value', snap=>{
+    reportData.innerHTML='<pre>'+JSON.stringify(snap.val(), null, 2)+'</pre>';
+  });
 }
 </script>
 </body>
