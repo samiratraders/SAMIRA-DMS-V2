@@ -1,718 +1,214 @@
-<html style="margin:0;padding:0;">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
-<script>
-(function(){
-  var s=document.createElement('style');
-  s.textContent=':root{--navy:#16233D;--navyLight:#22344F;--green:#145C4B;--greenLight:#1C7A64;--marigold:#E0A72E;--brick:#B23A2E;--paper:#FBF9F4;--paperDark:#F1ECDF;--ink:#232323;--inkSoft:#5B5648;--border:rgba(35,35,35,.08)}'+
-  '.reveal{opacity:0;transform:translateY(14px);animation:fadeUp .55s ease forwards}.reveal:nth-child(2){animation-delay:.08s}.reveal:nth-child(3){animation-delay:.16s}.reveal:nth-child(4){animation-delay:.24s}.reveal:nth-child(5){animation-delay:.32s}.reveal:nth-child(6){animation-delay:.4s}@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}'+
-  '.metric-card{transition:transform .22s ease,border-color .22s ease}.metric-card:hover{transform:translateY(-3px);border-color:var(--marigold)}'+
-  '.tbl-row{transition:background .15s ease}.tbl-row:hover{background:rgba(224,167,46,.06)}'+
-  '.nav-btn.active{color:#fff;background:rgba(224,167,46,.12)}.nav-btn.active::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--marigold);border-radius:0 3px 3px 0}'+
-  '.slide-over{transform:translateX(100%);transition:transform .3s ease}.slide-over.open{transform:translateX(0)}'+
-  '.overlay{opacity:0;pointer-events:none;transition:opacity .25s ease}.overlay.open{opacity:1;pointer-events:auto}'+
-  '.tabular{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}'+
-  '.spine{background:linear-gradient(180deg,#16233D 0%,#0E1830 100%)}'+
-  '::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:var(--paperDark)}::-webkit-scrollbar-thumb{background:var(--inkSoft);border-radius:4px}'+
-  '.tab-btn.active{background:var(--navy);color:#fff}'+
-  '.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}'+
-  '.ledger-bg{background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(20,92,75,.06) 31px,rgba(20,92,75,.06) 32px)}';
-  document.head.appendChild(s);
-})();
-</script>
-<div style="background-color:transparent;box-sizing:border-box;">
-  <div id="app" style="font-family:'Source Sans 3','Noto Sans Bengali',sans-serif;background:var(--paper);color:var(--ink);min-height:600px;"></div>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAMIRA DMS V3</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family: 'Segoe UI', sans-serif;}
+body {background:#f1f5f9;color:#1e293b}
+.header {background:#0f172a;color:#fff;padding:15px;text-align:center;font-size:20px;font-weight:bold}
+.container {max-width:900px;margin:20px auto;padding:15px}
+.box {background:#fff;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.1);margin-bottom:15px}
+input,select,button {width:100%;padding:12px;margin:8px 0;border:1px solid #cbd5e1;border-radius:6px;font-size:15px}
+button {background:#2563eb;color:#fff;border:none;font-weight:bold;cursor:pointer}
+button:hover {background:#1d4ed8}
+.btn-danger {background:#dc2626}
+.btn-success {background:#16a34a}
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:15px}
+table {width:100%;border-collapse:collapse;margin-top:10px}
+th,td {border:1px solid #e2e8f0;padding:8px;text-align:center;font-size:14px}
+th {background:#f8fafc}
+.hidden {display:none}
+.total-row {background:#fef9c3;font-weight:bold}
+@media print {.no-print {display:none} body{background:#fff}}
+</style>
+</head>
+<body>
+
+<div class="header">SAMIRA TRADERS - DMS V3</div>
+
+<!-- LOGIN -->
+<div id="loginPage" class="container">
+  <div class="box" style="max-width:400px;margin:auto">
+    <h2 style="text-align:center;margin-bottom:15px">Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <p style="font-size:12px;text-align:center;margin-top:10px">Demo: admin / 1234</p>
+  </div>
 </div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="container hidden">
+  <div class="box no-print">
+    <h3>মেনু</h3>
+    <div class="grid">
+      <button onclick="showDSR()">DSR Settlement</button>
+      <button onclick="logout()" class="btn-danger">Logout</button>
+    </div>
+  </div>
+
+  <!-- DSR SETTLEMENT -->
+  <div id="dsrPage" class="box">
+    <h3>DSR Evening Settlement Report</h3>
+    <div class="grid">
+      <input id="dsrDate" type="date">
+      <select id="dsrRoute"><option>লাকুরতলা</option><option>বরগুনা সদর</option></select>
+      <select id="dsrName"><option>আঃ রহমান</option><option>মনির ভাই</option><option>মুসা ভাই</option></select>
+    </div>
+
+    <h4>1. Assigned, Return & Sales</h4>
+    <table id="salesTable">
+      <tr><th>পণ্যের নাম</th><th>Assigned</th><th>Return</th><th>Rate</th><th>Sales Value</th></tr>
+    </table>
+    <button onclick="addProductRow()" class="no-print">+ পণ্য যোগ</button>
+
+    <div class="grid">
+      <div>
+        <h4>2. Free Items</h4>
+        <div id="freeItems"></div>
+        <button onclick="addFree()" class="no-print">+ Free যোগ</button>
+      </div>
+      <div>
+        <h4>3. Damage Items</h4>
+        <div id="damageItems"></div>
+        <button onclick="addDamage()" class="no-print">+ Damage যোগ</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <h4>4. Discount</h4>
+        <input id="discount" type="number" value="0" placeholder="মোট ডিসকাউন্ট">
+      </div>
+      <div>
+        <h4>5. Expense</h4>
+        <input id="expense" type="number" value="0" placeholder="রাস্তা খরচ">
+      </div>
+    </div>
+
+    <h4>6. Customer Due</h4>
+    <div id="customerDue"></div>
+    <button onclick="addCustomerDue()" class="no-print">+ বাকি যোগ</button>
+
+    <div class="box total-row">
+      <h3>GRAND BALANCE SHEET</h3>
+      <p>মোট বিক্রি: <span id="grossSales">0</span> টাকা</p>
+      <p>ফ্রি (-): <span id="totalFree">0</span></p>
+      <p>ডিসকাউন্ট (-): <span id="totalDiscount">0</span></p>
+      <p>ড্যামেজ (-): <span id="totalDamage">0</span></p>
+      <p>খরচ (-): <span id="totalExpense">0</span></p>
+      <p>কাস্টমার বাকি (-): <span id="totalDue">0</span></p>
+      <hr>
+      <h3>DSR প্রদেয়: <span id="payable">0</span> টাকা</h3>
+      <h4>Collection: <input id="collection" type="number" value="0" oninput="calculate()"></h4>
+      <h2 style="color:red">Balance: <span id="balance">0</span> টাকা</h2>
+    </div>
+
+    <button onclick="saveAndPrint()" class="btn-success no-print">💾 Save & Print</button>
+  </div>
+</div>
+
 <script>
-(function(){
-  /* ========== CONSTANTS ========== */
-  var C={navy:"#16233D",navyLight:"#22344F",green:"#145C4B",greenLight:"#1C7A64",marigold:"#E0A72E",brick:"#B23A2E",paper:"#FBF9F4",paperDark:"#F1ECDF",ink:"#232323",inkSoft:"#5B5648"};
-  var ROLES=[
-    {id:"admin",label:"Admin / Owner",bn:"অ্যাডমিন",color:C.navy,desc:"Full system control"},
-    {id:"manager",label:"Manager",bn:"ম্যানেজার",color:C.green,desc:"All accounts & approvals"},
-    {id:"sr",label:"SR (Sales)",bn:"এসআর",color:C.marigold,desc:"Order collection via mobile"},
-    {id:"dsr",label:"DSR (Delivery)",bn:"ডিএসআর",color:C.marigold,desc:"Delivery & daily settlement"},
-    {id:"collection",label:"Collection Officer",bn:"কালেকশন",color:C.greenLight,desc:"Due collection"},
-    {id:"subdb",label:"Sub DB",bn:"সাব-ডিবি",color:C.navyLight,desc:"Sub-distributor tracking"},
-    {id:"supplier",label:"Supplier",bn:"সাপ্লায়ার",color:C.brick,desc:"Supplier ledger"},
-    {id:"inventory",label:"Inventory",bn:"ইনভেন্টরি",color:C.navy,desc:"Stock management"},
-    {id:"customer",label:"Customer",bn:"কাস্টমার",color:C.brick,desc:"Customer view"}
-  ];
-  var NAV=[
-    {id:"dashboard",label:"Dashboard",bn:"ড্যাশবোর্ড",icon:"M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"},
-    {id:"inventory",label:"Inventory",bn:"ইনভেন্টরি",icon:"M20 6L10 1 0 6l10 5 10-5zM0 6v12l10 5 10-5V6M10 11v12"},
-    {id:"suppliers",label:"Suppliers",bn:"সাপ্লায়ার",icon:"M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"},
-    {id:"subdb",label:"Sub DB",bn:"সাব-ডিবি",icon:"M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"},
-    {id:"customers",label:"Customers",bn:"কাস্টমার",icon:"M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"},
-    {id:"orders",label:"Orders",bn:"অর্ডার",icon:"M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"},
-    {id:"dsr",label:"DSR Settlement",bn:"ডিএসআর সেটলমেন্ট",icon:"M12 2v10m0 0l-3-3m3 3l3-3M5 12a7 7 0 1014 0 7 7 0 00-14 0z"},
-    {id:"collections",label:"Collections",bn:"সংগ্রহ",icon:"M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"},
-    {id:"investment",label:"Investment Calc",bn:"ইনভেস্টমেন্ট",icon:"M3 3v18h18M7 14l4-4 4 4 5-5"},
-    {id:"claims",label:"Claims",bn:"ক্লেইম",icon:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"},
-    {id:"settings",label:"Backup / Settings",bn:"ব্যাকআপ",icon:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15a5 5 0 110-10 5 5 0 010 10z"}
-  ];
-  var SK="samira-dms-data-v2";
+let products=[{name:"Sandalina J 100g",rate:49.9},{name:"Sandalina M 100g",rate:49.9},{name:"Sandalin R 100g",rate:49.9}];
 
-  /* ========== SEED DATA ========== */
-  var SEED={
-    products:[
-      {sku:"P-0001",name:"ACI Aerosol 400ml",cat:"Home Care",brand:"ACI",supplierId:"S-0001",unit:"pcs",cost:180,price:210,opening:100},
-      {sku:"P-0002",name:"ACI Pure Salt 1kg",cat:"Staples",brand:"ACI",supplierId:"S-0001",unit:"pcs",cost:35,price:42,opening:500},
-      {sku:"P-0003",name:"Square Toilet Soap 100g",cat:"Personal Care",brand:"Square",supplierId:"S-0002",unit:"pcs",cost:38,price:45,opening:300},
-      {sku:"P-0004",name:"Lux Soap 100g",cat:"Personal Care",brand:"Unilever",supplierId:"S-0003",unit:"pcs",cost:42,price:50,opening:400},
-      {sku:"P-0005",name:"PRAN Mango Juice 1L",cat:"Beverage",brand:"PRAN",supplierId:"S-0004",unit:"pcs",cost:110,price:130,opening:150},
-      {sku:"P-0006",name:"Bashundhara Tissue",cat:"Home Care",brand:"Bashundhara",supplierId:"S-0005",unit:"pcs",cost:70,price:85,opening:180}
-    ],
-    suppliers:[
-      {id:"S-0001",name:"ACI Limited",contact:"Karim",phone:"01711000001",opening:0},
-      {id:"S-0002",name:"Square FMCG",contact:"Rahman",phone:"01711000002",opening:0},
-      {id:"S-0003",name:"Unilever BD",contact:"Hasan",phone:"01711000003",opening:50000},
-      {id:"S-0004",name:"PRAN Foods",contact:"Kamal",phone:"01711000004",opening:0},
-      {id:"S-0005",name:"Bashundhara Group",contact:"Selim",phone:"01711000005",opening:25000}
-    ],
-    subdb:[
-      {id:"DB-0001",name:"Rahim Traders",area:"Mirpur",phone:"01911000001",opening:0},
-      {id:"DB-0002",name:"Karim Enterprise",area:"Uttara",phone:"01911000002",opening:15000}
-    ],
-    customers:[
-      {id:"C-0001",name:"Rahim",shop:"Rahim General Store",area:"Mirpur",phone:"01811000001",creditLimit:50000,opening:0},
-      {id:"C-0002",name:"Karim",shop:"Karim Bazar",area:"Mirpur",phone:"01811000002",creditLimit:30000,opening:5000},
-      {id:"C-0003",name:"Jalil",shop:"Jalil Super Shop",area:"Uttara",phone:"01811000003",creditLimit:80000,opening:0},
-      {id:"C-0004",name:"Salam",shop:"Salam Departmental",area:"Dhanmondi",phone:"01811000005",creditLimit:60000,opening:0}
-    ],
-    purchases:[
-      {id:"PUR-0001",date:"2026-08-01",supplierId:"S-0001",sku:"P-0001",qty:100,cost:180},
-      {id:"PUR-0002",date:"2026-08-02",supplierId:"S-0001",sku:"P-0002",qty:500,cost:35},
-      {id:"PUR-0003",date:"2026-08-03",supplierId:"S-0003",sku:"P-0004",qty:400,cost:42}
-    ],
-    stockMovements:[
-      /* type: in / out-dsr / out-sale / return-fresh / return-damage */
-      {id:"M-0001",date:"2026-08-05",type:"out-dsr",sku:"P-0001",qty:20,dsrId:"DSR-001",ref:"DSR-2026-08-05"},
-      {id:"M-0002",date:"2026-08-05",type:"out-dsr",sku:"P-0002",qty:50,dsrId:"DSR-001",ref:"DSR-2026-08-05"},
-      {id:"M-0003",date:"2026-08-05",type:"return-fresh",sku:"P-0001",qty:5,dsrId:"DSR-001",ref:"DSR-2026-08-05"},
-      {id:"M-0004",date:"2026-08-05",type:"return-damage",sku:"P-0002",qty:3,dsrId:"DSR-001",ref:"DSR-2026-08-05"}
-    ],
-    orders:[
-      {id:"ORD-0001",date:"2026-08-05",customerId:"C-0001",sku:"P-0001",qty:10,price:210,discount:0,status:"Delivered",srId:"SR-001",dsrId:"DSR-001",freeQty:0},
-      {id:"ORD-0002",date:"2026-08-05",customerId:"C-0002",sku:"P-0002",qty:25,price:42,discount:20,status:"Delivered",srId:"SR-001",dsrId:"DSR-001",freeQty:2},
-      {id:"ORD-0003",date:"2026-08-06",customerId:"C-0003",sku:"P-0004",qty:30,price:50,discount:0,status:"Approved",srId:"SR-002",dsrId:"DSR-002",freeQty:0}
-    ],
-    dsrSettlements:[
-      {id:"DSR-2026-08-05",date:"2026-08-05",dsrId:"DSR-001",dsrName:"Zakaria",stockOutValue:6300,returnsFresh:900,returnsDamage:105,freeValue:84,discount:20,expenses:150,customerDue:2000,netPayable:3041,status:"Settled"}
-    ],
-    collections:[
-      {id:"COL-0001",date:"2026-08-06",customerId:"C-0001",amount:2000,method:"Cash",collectedBy:"Kamal"},
-      {id:"COL-0002",date:"2026-08-07",customerId:"C-0002",amount:1000,method:"bKash",collectedBy:"Kamal"}
-    ],
-    claims:[
-      {id:"CLM-0001",date:"2026-08-03",supplierId:"S-0001",sku:"P-0001",freeQty:5,discount:0,value:900,status:"Pending"},
-      {id:"CLM-0002",date:"2026-08-05",supplierId:"S-0003",sku:"P-0004",freeQty:10,discount:0,value:420,status:"Approved"}
-    ],
-    assets:{
-      securityDeposit:50000,
-      transportAssets:120000,
-      officeAdvance:15000,
-      godownAdvance:25000,
-      pendingBills:8500
-    },
-    dailyFreeDiscount:[
-      {date:"2026-08-05",freeValue:84,discountValue:20},
-      {date:"2026-08-06",freeValue:0,discountValue:0}
-    ],
-    activityLog:[
-      {time:todayISO()+" 09:15",user:"System",action:"System initialized",role:"system"}
-    ]
+// LOGIN
+function login(){
+  if(username.value=='admin' && password.value=='1234'){
+    loginPage.classList.add('hidden');
+    dashboard.classList.remove('hidden');
+    dsrDate.value=new Date().toISOString().split('T')[0];
+    addProductRow();
+  }else alert('ভুল ইউজার/পাসওয়ার্ড')
+}
+function logout(){location.reload()}
+
+// DSR PAGE
+function showDSR(){}
+
+function addProductRow(){
+  let row = `<tr>
+    <td><select>${products.map(p=>`<option>${p.name}</option>`).join('')}</select></td>
+    <td><input type="number" value="0" oninput="calculate()"></td>
+    <td><input type="number" value="0" oninput="calculate()"></td>
+    <td><input type="number" value="49.9" oninput="calculate()"></td>
+    <td class="salesVal">0</td>
+  </tr>`;
+  salesTable.innerHTML += row;
+}
+
+function addFree(){
+  freeItems.innerHTML += `<div class="grid"><input placeholder="পণ্য"><input type="number" placeholder="Qty" oninput="calculate()"></div>`;
+}
+function addDamage(){
+  damageItems.innerHTML += `<div class="grid"><input placeholder="পণ্য"><input type="number" placeholder="Qty"><input type="number" placeholder="Value" oninput="calculate()"></div>`;
+}
+function addCustomerDue(){
+  customerDue.innerHTML += `<div class="grid"><input placeholder="কাস্টমার নাম"><input type="number" placeholder="টাকা" oninput="calculate()"></div>`;
+}
+
+// MASTER CALCULATION ENGINE
+function calculate(){
+  let gross=0, freeVal=0, damageVal=0, dueVal=0;
+
+  // Sales = Assigned - Return
+  [...salesTable.rows].slice(1).forEach(r=>{
+    let assigned=Number(r.cells[1].querySelector('input').value)||0;
+    let ret=Number(r.cells[2].querySelector('input').value)||0;
+    let rate=Number(r.cells[3].querySelector('input').value)||0;
+    let sales=(assigned-ret)*rate;
+    r.cells[4].innerText=sales.toFixed(2);
+    gross+=sales;
+  });
+
+  // Free
+  [...freeItems.children].forEach(d=>{
+    let qty=Number(d.children[1].value)||0;
+    freeVal+=qty*49.9; // পরে product wise rate নিব
+  });
+
+  // Damage
+  [...damageItems.children].forEach(d=>{
+    damageVal+=Number(d.children[2].value)||0;
+  });
+
+  // Due
+  [...customerDue.children].forEach(d=>{
+    dueVal+=Number(d.children[1].value)||0;
+  });
+
+  let discount=Number(discount.value)||0;
+  let expense=Number(expense.value)||0;
+  let collection=Number(collection.value)||0;
+
+  let payable = gross - freeVal - discount - damageVal - expense - dueVal;
+  let balance = payable - collection;
+
+  grossSales.innerText=gross.toFixed(2);
+  totalFree.innerText=freeVal.toFixed(2);
+  totalDamage.innerText=damageVal.toFixed(2);
+  totalDiscount.innerText=discount.toFixed(2);
+  totalExpense.innerText=expense.toFixed(2);
+  totalDue.innerText=dueVal.toFixed(2);
+  payable.innerText=payable.toFixed(2);
+  balance.innerText=balance.toFixed(2);
+}
+
+function saveAndPrint(){
+  let data = {
+    date: dsrDate.value,
+    route: dsrRoute.value,
+    dsr: dsrName.value,
+    gross: grossSales.innerText,
+    payable: payable.innerText,
+    balance: balance.innerText,
+    time: new Date().toLocaleString()
   };
-
-  /* ========== UTILS ========== */
-  function taka(n){return"৳"+(Number(n)||0).toLocaleString("en-BD",{maximumFractionDigits:0});}
-  function todayISO(){return new Date().toISOString().slice(0,10);}
-  function nextId(list,prefix){
-    var nums=list.map(function(x){return x.id||x.sku}).filter(function(id){return id&&id.startsWith(prefix+"-")}).map(function(id){return parseInt(id.split("-")[1],10)}).filter(function(n){return!isNaN(n)});
-    var nxt=(nums.length?Math.max.apply(null,nums):0)+1;
-    return prefix+"-"+String(nxt).padStart(4,"0");
-  }
-  function svgIcon(p,sz){return'<svg width="'+(sz||16)+'" height="'+(sz||16)+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="'+p+'"/></svg>';}
-  function loadData(){try{var r=localStorage.getItem(SK);if(r)return JSON.parse(r);}catch(e){}return JSON.parse(JSON.stringify(SEED));}
-  function saveData(d){try{localStorage.setItem(SK,JSON.stringify(d));}catch(e){}}
-  function log(d,user,action,role){d.activityLog.unshift({time:new Date().toLocaleString("en-GB"),user:user,action:action,role:role||"-"});if(d.activityLog.length>200)d.activityLog.length=200;saveData(d);}
-
-  /* ========== LEDGER / CALCULATION ENGINE ========== */
-  var L={
-    /* Stock: Opening + Purchases + ReturnFresh − OutDSR − OutSale */
-    stock:function(d,sku){
-      var p=d.products.find(function(x){return x.sku===sku});if(!p)return 0;
-      var pur=d.purchases.filter(function(x){return x.sku===sku}).reduce(function(s,x){return s+x.qty},0);
-      var out=d.stockMovements.filter(function(m){return m.sku===sku&&(m.type==="out-dsr"||m.type==="out-sale")}).reduce(function(s,m){return s+m.qty},0);
-      var retFresh=d.stockMovements.filter(function(m){return m.sku===sku&&m.type==="return-fresh"}).reduce(function(s,m){return s+m.qty},0);
-      return p.opening+pur-out+retFresh;
-    },
-    damageStock:function(d,sku){
-      return d.stockMovements.filter(function(m){return m.sku===sku&&m.type==="return-damage"}).reduce(function(s,m){return s+m.qty},0);
-    },
-    stockValue:function(d,sku){var p=d.products.find(function(x){return x.sku===sku});return p?L.stock(d,sku)*p.cost:0;},
-    damageValue:function(d,sku){var p=d.products.find(function(x){return x.sku===sku});return p?L.damageStock(d,sku)*p.cost:0;},
-    totalInventoryValue:function(d){return d.products.reduce(function(s,p){return s+L.stockValue(d,p.sku)+L.damageValue(d,p.sku)},0);},
-    customerDue:function(d,cid){
-      var c=d.customers.find(function(x){return x.id===cid});if(!c)return 0;
-      var sales=d.orders.filter(function(o){return o.customerId===cid&&(o.status==="Approved"||o.status==="Delivered")}).reduce(function(s,o){return s+o.qty*o.price-(o.discount||0)},0);
-      var col=d.collections.filter(function(x){return x.customerId===cid}).reduce(function(s,x){return s+x.amount},0);
-      return c.opening+sales-col;
-    },
-    subdbDue:function(d,did){
-      var s=d.subdb.find(function(x){return x.id===did});if(!s)return 0;
-      return s.opening;
-    },
-    totalReceivable:function(d){
-      var cust=d.customers.reduce(function(s,c){return s+Math.max(0,L.customerDue(d,c.id))},0);
-      var sub=d.subdb.reduce(function(s,x){return s+Math.max(0,L.subdbDue(d,x.id))},0);
-      return cust+sub;
-    },
-    supplierDue:function(d,sid){
-      var s=d.suppliers.find(function(x){return x.id===sid});if(!s)return 0;
-      var pur=d.purchases.filter(function(p){return p.supplierId===sid}).reduce(function(sm,p){return sm+p.qty*p.cost},0);
-      return s.opening+pur;
-    },
-    totalPayable:function(d){return d.suppliers.reduce(function(s,sup){return s+Math.max(0,L.supplierDue(d,sup.id))},0);},
-    totalFreeDiscountValue:function(d){return d.dailyFreeDiscount.reduce(function(s,x){return s+x.freeValue+x.discountValue},0);},
-    /* DSR Settlement Formula */
-    dsrSettlement:function(stockOut,retFresh,retDamage,freeVal,disc,exp,due){
-      return stockOut-(retFresh+retDamage+freeVal+disc+due+exp);
-    },
-    /* Investment Formula as per specification:
-       Inventory (fresh+damage) + Due from (SubDB+Cust+Mgr+DSR+SR) + Free/Disc panel +
-       Pending bills + Security deposit + Transport + Office/Godown advance - Payable to suppliers */
-    investment:function(d){
-      var inv=L.totalInventoryValue(d);
-      var rec=L.totalReceivable(d);
-      var frd=L.totalFreeDiscountValue(d);
-      var pb=d.assets.pendingBills||0;
-      var sec=d.assets.securityDeposit||0;
-      var tr=d.assets.transportAssets||0;
-      var adv=(d.assets.officeAdvance||0)+(d.assets.godownAdvance||0);
-      var pay=L.totalPayable(d);
-      return{
-        inventory:inv,receivable:rec,freeDiscount:frd,pendingBills:pb,
-        security:sec,transport:tr,advance:adv,payable:pay,
-        total:inv+rec+frd+pb+sec+tr+adv-pay
-      };
-    }
-  };
-
-  /* ========== STATE ========== */
-  var state={data:loadData(),user:null,page:"dashboard",modal:null,modalData:{}};
-
-  /* ========== RENDER ========== */
-  function render(){
-    var app=document.getElementById("app");
-    if(!state.user){app.innerHTML=renderLogin();bindLogin();return;}
-    app.innerHTML=renderShell();bindShell();
-  }
-
-  /* ---------- LOGIN ---------- */
-  function renderLogin(){
-    return '<div class="flex items-center justify-center p-6" style="min-height:640px;background:linear-gradient(160deg,'+C.navy+' 0%,#0E1830 100%)">'+
-      '<div class="w-full max-w-lg">'+
-        '<div class="text-center mb-6">'+
-          '<div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3" style="background:'+C.marigold+'"><span style="font-family:\'Noto Serif Bengali\',serif;font-size:28px;font-weight:700;color:'+C.navy+'">স</span></div>'+
-          '<h1 style="font-family:\'Cormorant Garamond\',serif;font-size:30px;font-weight:700;color:#fff">SAMIRA TRADERS DMS</h1>'+
-          '<p class="text-xs mt-1.5" style="color:#B8C2D6">Distribution Management System · v2.0 · Online + Offline</p>'+
-        '</div>'+
-        '<div class="rounded-2xl p-5" style="background:'+C.paper+'">'+
-          '<label class="block text-xs font-semibold mb-1.5" style="color:'+C.ink+'">Your Name</label>'+
-          '<input id="loginName" placeholder="Enter your full name" class="w-full px-3 py-2.5 rounded-lg border outline-none mb-4 text-sm" style="border-color:'+C.paperDark+';background:white"/>'+
-          '<label class="block text-xs font-semibold mb-2" style="color:'+C.ink+'">Select Your Role</label>'+
-          '<div class="grid grid-cols-2 md:grid-cols-3 gap-2 mb-5" id="roleGrid">'+
-            ROLES.map(function(r){return'<button data-role="'+r.id+'" class="role-btn flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-lg text-xs font-semibold text-left transition-all" style="background:white;color:'+C.ink+';border:1.5px solid '+C.paperDark+'"><div class="flex items-center gap-1.5 w-full"><span class="w-2 h-2 rounded-full shrink-0" style="background:'+r.color+'"></span><span class="truncate">'+r.label+'</span></div><div class="text-[10px] font-normal truncate w-full" style="color:'+C.inkSoft+'">'+r.bn+'</div></button>'}).join("")+
-          '</div>'+
-          '<button id="loginBtn" disabled class="w-full py-3 rounded-lg font-semibold text-sm text-white transition-opacity disabled:opacity-40" style="background:'+C.green+'">Sign In · প্রবেশ করুন</button>'+
-          '<div class="mt-4 pt-4 border-t text-[11px] text-center" style="border-color:'+C.paperDark+';color:'+C.inkSoft+'">'+
-            '<span style="color:'+C.marigold+'">●</span> Works Offline · <span style="color:'+C.green+'">●</span> Auto Sync · <span style="color:'+C.navy+'">●</span> Android Ready (PWA)'+
-          '</div>'+
-        '</div>'+
-      '</div>'+
-    '</div>';
-  }
-  function bindLogin(){
-    var sel=null,ne=document.getElementById("loginName"),btn=document.getElementById("loginBtn");
-    document.querySelectorAll(".role-btn").forEach(function(b){
-      b.onclick=function(){
-        sel=b.dataset.role;
-        document.querySelectorAll(".role-btn").forEach(function(x){var r=ROLES.find(function(z){return z.id===x.dataset.role});x.style.background="white";x.style.color=C.ink;x.style.borderColor=C.paperDark;});
-        var r=ROLES.find(function(z){return z.id===sel});b.style.background=r.color;b.style.color="#fff";b.style.borderColor=r.color;
-        btn.disabled=!ne.value.trim()||!sel;
-      };
-    });
-    ne.oninput=function(){btn.disabled=!ne.value.trim()||!sel;};
-    btn.onclick=function(){if(!ne.value.trim()||!sel)return;var r=ROLES.find(function(z){return z.id===sel});state.user={name:ne.value.trim(),role:r.id,roleLabel:r.label,color:r.color};log(state.data,state.user.name,"Logged in as "+r.label,r.label);render();};
-  }
-
-  /* ---------- SHELL ---------- */
-  function renderShell(){
-    var initial=state.user.name.charAt(0).toUpperCase();
-    return '<div class="flex" style="min-height:620px">'+
-      '<aside class="hidden md:flex flex-col w-60 spine text-white shrink-0" style="min-height:620px">'+
-        '<div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.1)"><div style="font-family:\'Cormorant Garamond\',serif;font-size:19px;font-weight:700">SAMIRA DMS</div><div class="text-[11px] mt-1" style="color:#8592AC">v2.0 · Ledger Book</div></div>'+
-        '<nav class="flex-1 py-2 overflow-y-auto">'+
-          NAV.map(function(item){return'<button data-nav="'+item.id+'" class="nav-btn w-full flex items-center gap-2.5 pl-4 pr-3 py-2.5 text-xs relative transition-colors '+(state.page===item.id?'active':'')+'" style="color:'+(state.page===item.id?'#fff':'#9AA6BE')+'"><span style="flex-shrink:0">'+svgIcon(item.icon,16)+'</span><span class="flex-1 text-left">'+item.label+'</span></button>'}).join("")+
-        '</nav>'+
-        '<div class="px-4 py-3 border-t" style="border-color:rgba(255,255,255,.1)">'+
-          '<div class="flex items-center gap-2 mb-2"><div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold" style="background:'+state.user.color+';color:#fff">'+initial+'</div><div class="min-w-0 flex-1"><div class="text-xs truncate font-medium">'+state.user.name+'</div><div class="text-[10px] truncate" style="color:#8592AC">'+state.user.roleLabel+'</div></div></div>'+
-          '<button id="logoutBtn" class="w-full flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-lg" style="color:#B8C2D6;background:rgba(255,255,255,.06)">'+svgIcon("M17 16l4-4m0 0l-4-4m4 4H7",13)+' Logout</button>'+
-        '</div>'+
-      '</aside>'+
-      '<div class="flex-1 min-w-0">'+
-        '<div class="md:hidden flex items-center justify-between px-4 py-3 spine text-white"><span class="font-bold text-sm">SAMIRA DMS</span><button id="logoutBtn" class="text-white">'+svgIcon("M17 16l4-4m0 0l-4-4m4 4H7",16)+'</button></div>'+
-        '<div class="p-4 md:p-6 pb-24 md:pb-6 max-w-6xl mx-auto">'+renderPage()+'</div>'+
-        '<div class="md:hidden fixed bottom-0 left-0 right-0 flex items-stretch z-20 spine" style="border-top:1px solid rgba(255,255,255,.1)">'+
-          NAV.slice(0,5).map(function(item){return'<button data-nav="'+item.id+'" class="flex-1 flex flex-col items-center gap-0.5 py-2" style="color:'+(state.page===item.id?C.marigold:'#8592AC')+'">'+svgIcon(item.icon,17)+'<span class="text-[9px] leading-none">'+item.label.split(" ")[0]+'</span></button>'}).join("")+
-        '</div>'+
-      '</div>'+
-      '<div id="overlay" class="overlay fixed inset-0 z-30 bg-black/40"></div>'+
-      '<div id="slideover" class="slide-over fixed top-0 right-0 bottom-0 z-40 w-full max-w-md bg-white shadow-2xl overflow-y-auto">'+renderModal()+'</div>'+
-    '</div>';
-  }
-  function bindShell(){
-    document.querySelectorAll("[data-nav]").forEach(function(b){b.onclick=function(){state.page=b.dataset.nav;state.modal=null;render();};});
-    var lb=document.getElementById("logoutBtn");if(lb)lb.onclick=function(){state.user=null;render();};
-    var ov=document.getElementById("overlay"),so=document.getElementById("slideover");
-    if(state.modal){ov.classList.add("open");so.classList.add("open");}
-    if(ov)ov.onclick=function(){state.modal=null;state.modalData={};render();};
-    bindModal();
-    if(state.page==="dashboard")renderCharts();
-    if(state.page==="investment")renderInvestmentChart();
-  }
-
-  /* ---------- PAGES ---------- */
-  function renderPage(){
-    switch(state.page){
-      case"dashboard":return renderDashboard();
-      case"inventory":return renderInventory();
-      case"suppliers":return renderSuppliers();
-      case"subdb":return renderSubDB();
-      case"customers":return renderCustomers();
-      case"orders":return renderOrders();
-      case"dsr":return renderDSR();
-      case"collections":return renderCollections();
-      case"investment":return renderInvestment();
-      case"claims":return renderClaims();
-      case"settings":return renderSettings();
-    }
-    return"";
-  }
-
-  function pageHeader(title,bn,count,onAdd,addLabel){
-    return '<div class="flex items-start justify-between mb-5 gap-3"><div><h2 style="font-family:\'Cormorant Garamond\',\'Noto Serif Bengali\',serif;font-size:24px;font-weight:700;color:'+C.ink+'">'+title+'</h2><p class="text-xs mt-1" style="color:'+C.inkSoft+'">'+bn+(count!==undefined?' · Total '+count+' records':'')+'</p></div>'+(onAdd?'<button onclick="'+onAdd+'" class="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold text-white shrink-0" style="background:'+C.green+'"><span>+</span> '+addLabel+'</button>':"")+'</div>';
-  }
-  function searchBox(id,ph){return'<div class="relative mb-4"><span class="absolute left-3 top-1/2 -translate-y-1/2" style="color:'+C.inkSoft+'">'+svgIcon("M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 119.5 5a4.5 4.5 0 010 9z",15)+'</span><input id="'+id+'" placeholder="'+ph+'" class="w-full pl-9 pr-3 py-2.5 rounded-lg border outline-none text-sm" style="border-color:'+C.paperDark+';background:white"/></div>';}
-
-  /* ===== DASHBOARD ===== */
-  function renderDashboard(){
-    var d=state.data,today=todayISO();
-    var todaySales=d.orders.filter(function(o){return o.date===today&&(o.status==="Approved"||o.status==="Delivered")}).reduce(function(s,o){return s+o.qty*o.price-(o.discount||0)},0);
-    var todayColl=d.collections.filter(function(c){return c.date===today}).reduce(function(s,c){return s+c.amount},0);
-    var inv=L.totalInventoryValue(d);
-    var rec=L.totalReceivable(d);
-    var pay=L.totalPayable(d);
-    var invCalc=L.investment(d);
-    var pendingClaims=d.claims.filter(function(c){return c.status==="Pending"}).reduce(function(s,c){return s+c.value},0);
-
-    var metrics=[
-      {label:"Today's Sales",bn:"আজকের বিক্রয়",value:taka(todaySales),color:C.green,icon:"M3 3h18v4H3zm0 7h18v4H3zm0 7h18v4H3z"},
-      {label:"Today's Collection",bn:"আজকের সংগ্রহ",value:taka(todayColl),color:C.greenLight,icon:"M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"},
-      {label:"Inventory Value",bn:"ইনভেন্টরি মূল্য",value:taka(inv),color:C.navy,icon:"M20 6L10 1 0 6l10 5 10-5zM0 6v12l10 5 10-5V6M10 11v12"},
-      {label:"Receivable",bn:"বাকি টাকা",value:taka(rec),color:C.brick,icon:"M16 11c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3z"},
-      {label:"Payable",bn:"পাওনা টাকা",value:taka(pay),color:C.navyLight,icon:"M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4z"},
-      {label:"Net Investment",bn:"নেট ইনভেস্টমেন্ট",value:taka(invCalc.total),color:C.marigold,icon:"M3 3v18h18M7 14l4-4 4 4 5-5"},
-      {label:"Pending Claims",bn:"পেন্ডিং ক্লেইম",value:taka(pendingClaims),color:C.brick,icon:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"},
-      {label:"Products",bn:"মোট পণ্য",value:d.products.length+" Items",color:C.greenLight,icon:"M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0020 4H5.21l-.94-2H1z"}
-    ];
-
-    return '<div>'+
-      '<div class="mb-5"><h2 style="font-family:\'Cormorant Garamond\',serif;font-size:28px;font-weight:700;color:'+C.ink+'">Business Overview</h2><p class="text-xs mt-1" style="color:'+C.inkSoft+'">'+new Date().toLocaleDateString("en-GB",{weekday:"long",year:"numeric",month:"long",day:"numeric"})+' · Logged in as: <strong>'+state.user.name+'</strong> ('+state.user.roleLabel+')</p></div>'+
-      '<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">'+
-        metrics.map(function(m){return'<div class="metric-card reveal rounded-xl p-4 bg-white" style="border:1px solid '+C.paperDark+';border-left:4px solid '+m.color+'"><div class="flex items-center gap-2 mb-2"><div class="w-7 h-7 rounded-md flex items-center justify-center" style="background:'+m.color+'15;color:'+m.color+'">'+svgIcon(m.icon,14)+'</div><div class="text-[10px] font-semibold uppercase tracking-wide" style="color:'+C.inkSoft+'">'+m.label+'</div></div><div class="tabular text-base font-bold" style="color:'+C.ink+'">'+m.value+'</div><div class="text-[10px] mt-0.5" style="color:'+C.inkSoft+'">'+m.bn+'</div></div>'}).join("")+
-      '</div>'+
-      '<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-5">'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-1" style="color:'+C.ink+'">Inventory Composition</h3><p class="text-[11px] mb-3" style="color:'+C.inkSoft+'">Fresh vs Damaged stock value by product</p><div id="chartInv" style="height:260px;width:100%"></div></div>'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-1" style="color:'+C.ink+'">Investment Breakdown</h3><p class="text-[11px] mb-3" style="color:'+C.inkSoft+'">Where your capital is deployed</p><div id="chartInv2" style="height:260px;width:100%"></div></div>'+
-      '</div>'+
-      '<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">'+
-        '<div class="reveal rounded-xl p-5 bg-white lg:col-span-2" style="border:1px solid '+C.paperDark+'"><div class="flex items-center justify-between mb-3"><div><h3 class="font-semibold text-sm" style="color:'+C.ink+'">Recent Orders</h3><p class="text-[11px]" style="color:'+C.inkSoft+'">Latest transactions</p></div><button data-nav="orders" class="text-[11px] font-semibold" style="color:'+C.green+'">View All →</button></div><table class="w-full text-xs"><thead><tr style="color:'+C.inkSoft+'"><th class="text-left pb-2 font-semibold">Customer</th><th class="text-left pb-2 font-semibold hidden md:table-cell">Product</th><th class="text-right pb-2 font-semibold">Amount</th><th class="text-right pb-2 font-semibold">Status</th></tr></thead><tbody>'+
-          d.orders.slice(-6).reverse().map(function(o){var cust=d.customers.find(function(c){return c.id===o.customerId});var prod=d.products.find(function(p){return p.sku===o.sku});var tot=o.qty*o.price-(o.discount||0);var done=o.status==="Approved"||o.status==="Delivered";return'<tr class="tbl-row" style="border-top:1px solid '+C.paperDark+'"><td class="py-2.5"><div class="font-medium">'+(cust?cust.shop:o.customerId)+'</div><div class="text-[10px]" style="color:'+C.inkSoft+'">'+o.date+'</div></td><td class="py-2.5 hidden md:table-cell" style="color:'+C.inkSoft+'">'+(prod?prod.name.slice(0,20):o.sku)+'</td><td class="tabular py-2.5 text-right font-semibold">'+taka(tot)+'</td><td class="py-2.5 text-right"><span class="badge" style="background:'+(done?'rgba(20,92,75,.1)':'rgba(224,167,46,.18)')+';color:'+(done?C.green:C.marigold)+'">'+o.status+'</span></td></tr>'}).join("")+
-        '</tbody></table></div>'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-3" style="color:'+C.ink+'">Quick Actions</h3><div class="space-y-2">'+
-          [{page:"orders",label:"New Order",color:C.green,icon:"M12 4v16m8-8H4"},
-           {page:"dsr",label:"DSR Settlement",color:C.marigold,icon:"M12 2v10m0 0l-3-3m3 3l3-3"},
-           {page:"collections",label:"New Collection",color:C.greenLight,icon:"M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"},
-           {page:"investment",label:"Investment Report",color:C.navy,icon:"M3 3v18h18M7 14l4-4 4 4 5-5"},
-           {page:"settings",label:"Backup / Restore",color:C.brick,icon:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"}].map(function(a){return'<button data-nav="'+a.page+'" class="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-semibold text-left transition-all hover:scale-[1.01]" style="background:'+a.color+'10;color:'+a.color+';border:1px solid '+a.color+'25"><span>'+svgIcon(a.icon,14)+'</span><span>'+a.label+'</span><span class="ml-auto">→</span></button>'}).join("")+
-        '</div></div>'+
-      '</div>'+
-      '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-3" style="color:'+C.ink+'">Recent Activity Log</h3><div class="space-y-2 max-h-48 overflow-y-auto">'+
-        d.activityLog.slice(0,10).map(function(a){return'<div class="flex items-start gap-2 text-xs"><span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" style="background:'+C.marigold+'"></span><div class="flex-1 min-w-0"><span class="font-medium" style="color:'+C.ink+'">'+a.user+'</span> <span style="color:'+C.inkSoft+'">'+a.action+'</span><div class="text-[10px]" style="color:'+C.inkSoft+'">'+a.time+' · '+a.role+'</div></div></div>'}).join("")+
-      '</div></div>'+
-    '</div>';
-  }
-  function renderCharts(){
-    var d=state.data;
-    chartInit("chartInv",{
-      tooltip:{trigger:"axis",axisPointer:{type:"shadow"},backgroundColor:"#fff",borderColor:C.paperDark,textStyle:{color:C.ink}},
-      legend:{data:["Fresh Stock","Damage Stock"],textStyle:{color:C.inkSoft,fontSize:11},top:0,right:0},
-      grid:{left:"3%",right:"4%",bottom:"3%",top:"18%",containLabel:true},
-      xAxis:{type:"category",data:d.products.map(function(p){return p.name.length>14?p.name.slice(0,14)+"...":p.name}),axisLabel:{color:C.inkSoft,fontSize:10,interval:0,rotate:20},axisLine:{lineStyle:{color:C.paperDark}},axisTick:{show:false}},
-      yAxis:{type:"value",axisLabel:{color:C.inkSoft,fontSize:10,formatter:function(v){return"৳"+(v/1000)+"k"}},splitLine:{lineStyle:{color:C.paperDark}}},
-      series:[
-        {name:"Fresh Stock",type:"bar",stack:"total",data:d.products.map(function(p){return L.stockValue(d,p.sku)}),itemStyle:{borderRadius:[4,4,0,0],color:C.green},barWidth:18},
-        {name:"Damage Stock",type:"bar",stack:"total",data:d.products.map(function(p){return L.damageValue(d,p.sku)}),itemStyle:{borderRadius:[4,4,0,0],color:C.brick},barWidth:18}
-      ]
-    });
-    var ic=L.investment(d);
-    chartInit("chartInv2",{
-      tooltip:{trigger:"item",backgroundColor:"#fff",borderColor:C.paperDark,textStyle:{color:C.ink},formatter:function(p){return p.name+": "+taka(p.value)}},
-      legend:{bottom:0,textStyle:{color:C.inkSoft,fontSize:10}},
-      series:[{type:"pie",radius:["45%","70%"],center:["50%","42%"],avoidLabelOverlap:true,itemStyle:{borderRadius:4,borderColor:"#fff",borderWidth:2},label:{show:false},
-        data:[
-          {name:"Inventory",value:ic.inventory,itemStyle:{color:C.green}},
-          {name:"Receivable",value:ic.receivable,itemStyle:{color:C.brick}},
-          {name:"Free/Discount",value:ic.freeDiscount,itemStyle:{color:C.marigold}},
-          {name:"Security",value:ic.security,itemStyle:{color:C.navy}},
-          {name:"Transport",value:ic.transport,itemStyle:{color:C.navyLight}},
-          {name:"Advance",value:ic.advance,itemStyle:{color:C.greenLight}},
-          {name:"(-) Payable",value:ic.payable,itemStyle:{color:C.inkSoft}}
-        ]}]
-    });
-  }
-  function chartInit(id,opt){
-    (function t(n){try{var el=document.getElementById(id);if(!el)return;if(typeof echarts==="undefined"){if(n<40){setTimeout(function(){t(n+1)},150);return;}return;}
-    var c=echarts.init(el);c.setOption(opt);window.addEventListener("resize",function(){c.resize()});}catch(e){}})(0);
-  }
-
-  /* ===== INVENTORY ===== */
-  function renderInventory(){
-    var d=state.data;
-    var totalInv=d.products.reduce(function(s,p){return s+L.stockValue(d,p.sku)},0);
-    var totalDmg=d.products.reduce(function(s,p){return s+L.damageValue(d,p.sku)},0);
-    return pageHeader("Inventory Management","ইনভেন্টরি ব্যবস্থাপনা",d.products.length,"window.__openModal('product')","Add Product")+
-      '<div class="grid grid-cols-3 gap-3 mb-4">'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+';border-left:4px solid '+C.green+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Fresh Stock Value</div><div class="tabular text-lg font-bold" style="color:'+C.green+'">'+taka(totalInv)+'</div></div>'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+';border-left:4px solid '+C.brick+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Damage Stock Value</div><div class="tabular text-lg font-bold" style="color:'+C.brick+'">'+taka(totalDmg)+'</div></div>'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+';border-left:4px solid '+C.navy+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Total Inventory</div><div class="tabular text-lg font-bold" style="color:'+C.navy+'">'+taka(totalInv+totalDmg)+'</div></div>'+
-      '</div>'+
-      searchBox("searchInv","Search product, brand, category...")+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><table class="w-full text-xs"><thead><tr style="color:'+C.inkSoft+';background:'+C.paper+'"><th class="text-left px-4 py-2.5 font-semibold">Product</th><th class="text-left px-2 py-2.5 font-semibold hidden md:table-cell">Supplier</th><th class="text-right px-2 py-2.5 font-semibold">Cost</th><th class="text-right px-2 py-2.5 font-semibold">Price</th><th class="text-right px-2 py-2.5 font-semibold">Fresh</th><th class="text-right px-2 py-2.5 font-semibold">Damage</th><th class="text-right px-4 py-2.5 font-semibold">Total Value</th></tr></thead><tbody id="invBody">'+renderInvRows(d.products)+'</tbody></table></div>'+
-      '<div class="mt-4 text-[11px] px-4 py-3 rounded-lg" style="background:'+C.green+'10;color:'+C.green+';border:1px solid '+C.green+'25"><strong>Formula:</strong> Opening Stock + Purchases + Return Fresh − Stock Out (DSR/Sale) = Closing Fresh Stock</div>';
-  }
-  function renderInvRows(list){
-    var d=state.data;
-    return list.map(function(p,i){var stk=L.stock(d,p.sku),dmg=L.damageStock(d,p.sku),val=(stk+dmg)*p.cost,sup=d.suppliers.find(function(s){return s.id===p.supplierId});var low=stk<20;return'<tr class="tbl-row" style="border-top:1px solid '+C.paperDark+'"><td class="px-4 py-3"><div class="font-medium" style="color:'+C.ink+'">'+p.name+'</div><div class="text-[10px]" style="color:'+C.inkSoft+'">'+p.brand+' · '+p.cat+' · '+p.sku+'</div></td><td class="px-2 py-3 hidden md:table-cell" style="color:'+C.inkSoft+'">'+(sup?sup.name.split(" ")[0]:"-")+'</td><td class="tabular px-2 py-3 text-right" style="color:'+C.inkSoft+'">'+taka(p.cost)+'</td><td class="tabular px-2 py-3 text-right font-semibold">'+taka(p.price)+'</td><td class="tabular px-2 py-3 text-right font-semibold" style="color:'+(low?C.brick:C.green)+'">'+stk+'</td><td class="tabular px-2 py-3 text-right" style="color:'+(dmg>0?C.brick:C.inkSoft)+'">'+dmg+'</td><td class="tabular px-4 py-3 text-right font-bold" style="color:'+C.navy+'">'+taka(val)+'</td></tr>'}).join("");
-  }
-
-  /* ===== SUPPLIERS ===== */
-  function renderSuppliers(){
-    var d=state.data;
-    return pageHeader("Suppliers","সাপ্লায়ার লেজার",d.suppliers.length,"window.__openModal('supplier')","Add Supplier")+
-      searchBox("searchSup","Search supplier...")+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><div id="supList">'+renderSupRows(d.suppliers)+'</div></div>';
-  }
-  function renderSupRows(list){
-    var d=state.data;
-    return list.map(function(s,i){var due=L.supplierDue(d,s.id);return'<div class="flex items-center justify-between px-5 py-4" style="border-top:'+(i?'1px dashed '+C.paperDark:"none")+'"><div class="min-w-0 flex-1"><div class="font-medium text-sm truncate" style="color:'+C.ink+'">'+s.name+'</div><div class="text-xs truncate" style="color:'+C.inkSoft+'">'+s.contact+' · '+s.phone+'</div></div><div class="text-right shrink-0 ml-3"><div class="text-[10px]" style="color:'+C.inkSoft+'">Payable</div><div class="tabular text-sm font-bold" style="color:'+(due>0?C.brick:C.green)+'">'+taka(due)+'</div></div></div>'}).join("");
-  }
-
-  /* ===== SUB DB ===== */
-  function renderSubDB(){
-    var d=state.data;
-    return pageHeader("Sub DB / Sub-Distributors","সাব-ডিবি",d.subdb.length,"window.__openModal('subdb')","Add Sub DB")+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><div id="subdbList">'+renderSubDBRows(d.subdb)+'</div></div>';
-  }
-  function renderSubDBRows(list){
-    var d=state.data;
-    if(!list.length)return'<div class="text-center py-12 text-xs" style="color:'+C.inkSoft+'">No Sub DB records</div>';
-    return list.map(function(s,i){var due=L.subdbDue(d,s.id);return'<div class="flex items-center justify-between px-5 py-4" style="border-top:'+(i?'1px dashed '+C.paperDark:"none")+'"><div class="min-w-0 flex-1"><div class="font-medium text-sm truncate" style="color:'+C.ink+'">'+s.name+'</div><div class="text-xs truncate" style="color:'+C.inkSoft+'">'+s.area+' · '+s.phone+'</div></div><div class="text-right shrink-0 ml-3"><div class="text-[10px]" style="color:'+C.inkSoft+'">Receivable</div><div class="tabular text-sm font-bold" style="color:'+(due>0?C.brick:C.green)+'">'+taka(due)+'</div></div></div>'}).join("");
-  }
-
-  /* ===== CUSTOMERS ===== */
-  function renderCustomers(){
-    var d=state.data;
-    return pageHeader("Customers","কাস্টমার / দোকান",d.customers.length,"window.__openModal('customer')","Add Customer")+
-      searchBox("searchCust","Search shop or name...")+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><div id="custList">'+renderCustRows(d.customers)+'</div></div>';
-  }
-  function renderCustRows(list){
-    var d=state.data;
-    return list.map(function(c,i){var due=L.customerDue(d,c.id),over=due>c.creditLimit;return'<div class="flex items-center justify-between px-5 py-4" style="border-top:'+(i?'1px dashed '+C.paperDark:"none")+'"><div class="min-w-0 flex-1"><div class="font-medium text-sm truncate" style="color:'+C.ink+'">'+c.shop+'</div><div class="text-xs truncate" style="color:'+C.inkSoft+'">'+c.name+' · '+c.area+' · '+c.phone+'</div></div><div class="text-right shrink-0 ml-3"><div class="text-[10px]" style="color:'+C.inkSoft+'">Limit: '+taka(c.creditLimit)+'</div><div class="tabular text-sm font-bold" style="color:'+(over?C.brick:C.ink)+'">'+taka(due)+(over?' ⚠':"")+'</div></div></div>'}).join("");
-  }
-
-  /* ===== ORDERS ===== */
-  function renderOrders(){
-    var d=state.data;
-    return pageHeader("Orders","অর্ডার ম্যানেজমেন্ট",d.orders.length,"window.__openModal('order')","New Order")+
-      searchBox("searchOrd","Search customer or order ID...")+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><table class="w-full text-xs"><thead><tr style="color:'+C.inkSoft+';background:'+C.paper+'"><th class="text-left px-4 py-2.5 font-semibold">Order</th><th class="text-left px-2 py-2.5 font-semibold hidden md:table-cell">Product</th><th class="text-right px-2 py-2.5 font-semibold">Qty</th><th class="text-right px-2 py-2.5 font-semibold">Total</th><th class="text-right px-2 py-2.5 font-semibold hidden md:table-cell">SR</th><th class="text-right px-4 py-2.5 font-semibold">Status</th></tr></thead><tbody id="ordBody">'+renderOrdRows(d.orders.slice().reverse())+'</tbody></table></div>';
-  }
-  function renderOrdRows(list){
-    var d=state.data;
-    return list.map(function(o,i){var cust=d.customers.find(function(c){return c.id===o.customerId});var prod=d.products.find(function(p){return p.sku===o.sku});var tot=o.qty*o.price-(o.discount||0);var col=o.status==="Delivered"?C.green:(o.status==="Approved"?C.marigold:C.inkSoft);return'<tr class="tbl-row" style="border-top:1px solid '+C.paperDark+'"><td class="px-4 py-3"><div class="font-medium">'+(cust?cust.shop:o.customerId)+'</div><div class="text-[10px] font-mono" style="color:'+C.inkSoft+'">'+o.id+' · '+o.date+'</div></td><td class="px-2 py-3 hidden md:table-cell" style="color:'+C.inkSoft+'">'+(prod?prod.name.slice(0,22):o.sku)+'</td><td class="tabular px-2 py-3 text-right">'+o.qty+(o.freeQty?' <span style="color:'+C.green+'">(+F'+o.freeQty+')</span>':"")+'</td><td class="tabular px-2 py-3 text-right font-semibold">'+taka(tot)+'</td><td class="px-2 py-3 hidden md:table-cell text-right" style="color:'+C.inkSoft+'">'+(o.srId||"-")+'</td><td class="px-4 py-3 text-right"><button data-ord="'+o.id+'" class="status-btn badge" style="background:'+col+'18;color:'+col+'">'+o.status+'</button></td></tr>'}).join("");
-  }
-
-  /* ===== DSR SETTLEMENT ===== */
-  function renderDSR(){
-    var d=state.data;
-    return pageHeader("DSR Daily Settlement","ডিএসআর দৈনিক সেটলমেন্ট",d.dsrSettlements.length,"window.__openModal('dsr')","New Settlement")+
-      '<div class="rounded-xl p-4 mb-4 text-xs" style="background:'+C.navy+'08;border:1px solid '+C.navy+'20;color:'+C.ink+'"><strong class="text-sm" style="color:'+C.navy+'">DSR Settlement Formula:</strong><br/><span class="tabular mt-1 inline-block">Stock Out Value − (Return Fresh + Return Damage + Free Products + Discount + Customer Due + Expenses) = Net Payable by DSR</span></div>'+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><table class="w-full text-xs"><thead><tr style="color:'+C.inkSoft+';background:'+C.paper+'"><th class="text-left px-4 py-2.5 font-semibold">Date / DSR</th><th class="text-right px-2 py-2.5 font-semibold">Stock Out</th><th class="text-right px-2 py-2.5 font-semibold hidden md:table-cell">Returns</th><th class="text-right px-2 py-2.5 font-semibold hidden md:table-cell">Free/Disc</th><th class="text-right px-2 py-2.5 font-semibold hidden md:table-cell">Due/Exp</th><th class="text-right px-4 py-2.5 font-semibold">Net Payable</th></tr></thead><tbody>'+
-        d.dsrSettlements.slice().reverse().map(function(s,i){return'<tr class="tbl-row" style="border-top:1px solid '+C.paperDark+'"><td class="px-4 py-3"><div class="font-medium">'+s.dsrName+'</div><div class="text-[10px]" style="color:'+C.inkSoft+'">'+s.id+' · '+s.date+'</div></td><td class="tabular px-2 py-3 text-right">'+taka(s.stockOutValue)+'</td><td class="tabular px-2 py-3 text-right hidden md:table-cell" style="color:'+C.green+'">−'+taka(s.returnsFresh+s.returnsDamage)+'</td><td class="tabular px-2 py-3 text-right hidden md:table-cell" style="color:'+C.marigold+'">−'+taka(s.freeValue+s.discount)+'</td><td class="tabular px-2 py-3 text-right hidden md:table-cell" style="color:'+C.brick+'">−'+taka(s.customerDue+s.expenses)+'</td><td class="tabular px-4 py-3 text-right font-bold" style="color:'+C.green+'">'+taka(s.netPayable)+'</td></tr>'}).join("")+
-      '</tbody></table></div>';
-  }
-
-  /* ===== COLLECTIONS ===== */
-  function renderCollections(){
-    var d=state.data;
-    var total=d.collections.reduce(function(s,c){return s+c.amount},0);
-    return pageHeader("Collections","বকেয়া আদায়",d.collections.length,"window.__openModal('collection')","New Collection")+
-      '<div class="grid grid-cols-3 gap-3 mb-4">'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Total Collected</div><div class="tabular text-lg font-bold" style="color:'+C.green+'">'+taka(total)+'</div></div>'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Cash</div><div class="tabular text-lg font-bold" style="color:'+C.navy+'">'+taka(d.collections.filter(function(c){return c.method==="Cash"}).reduce(function(s,c){return s+c.amount},0))+'</div></div>'+
-        '<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">Digital (bKash/Nagad)</div><div class="tabular text-lg font-bold" style="color:'+C.marigold+'">'+taka(d.collections.filter(function(c){return c.method==="bKash"||c.method==="Nagad"}).reduce(function(s,c){return s+c.amount},0))+'</div></div>'+
-      '</div>'+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><div id="colList">'+renderColRows(d.collections.slice().reverse())+'</div></div>';
-  }
-  function renderColRows(list){
-    var d=state.data;
-    return list.map(function(c,i){var cust=d.customers.find(function(x){return x.id===c.customerId});return'<div class="flex items-center justify-between px-5 py-4" style="border-top:'+(i?'1px dashed '+C.paperDark:"none")+'"><div class="min-w-0 flex-1"><div class="font-medium text-sm truncate" style="color:'+C.ink+'">'+(cust?cust.shop:c.customerId)+'</div><div class="text-xs truncate" style="color:'+C.inkSoft+'">'+c.date+' · '+c.method+' · by '+c.collectedBy+'</div></div><div class="tabular text-right shrink-0 ml-3 text-sm font-bold" style="color:'+C.green+'">'+taka(c.amount)+'</div></div>'}).join("");
-  }
-
-  /* ===== INVESTMENT CALCULATION ===== */
-  function renderInvestment(){
-    var d=state.data,ic=L.investment(d);
-    var items=[
-      {label:"Total Inventory (Fresh + Damage) at Cost",bn:"মোট ইনভেন্টরি (ফ্রেশ + ড্যামেজ)",value:ic.inventory,color:C.green,pos:true},
-      {label:"Receivable from Sub-DB + Customers",bn:"সাব-ডিবি ও কাস্টমারের বাকি টাকা",value:ic.receivable,color:C.brick,pos:true},
-      {label:"Daily Free Products + Discount Panel Value",bn:"দৈনিক ফ্রি পণ্য ও ডিসকাউন্ট",value:ic.freeDiscount,color:C.marigold,pos:true},
-      {label:"Pending / Unapproved Company Bills",bn:"পেন্ডিং কোম্পানি বিল",value:ic.pendingBills,color:C.navyLight,pos:true},
-      {label:"Security Deposit Money",bn:"জামানতকৃত টাকা",value:ic.security,color:C.navy,pos:true},
-      {label:"Transport & Fixed Assets",bn:"পরিবহন ও আসবাবপত্র",value:ic.transport,color:C.greenLight,pos:true},
-      {label:"Office + Godown Advance",bn:"অফিস ও গুদাম অ্যাডভান্স",value:ic.advance,color:C.navy,pos:true},
-      {label:"Payable to Suppliers",bn:"সাপ্লায়ারের পাওনা (মাইনাস)",value:ic.payable,color:C.inkSoft,pos:false}
-    ];
-    return pageHeader("Investment Calculation","মোট ইনভেস্টমেন্ট হিসাব")+
-      '<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">'+
-        '<div class="lg:col-span-2 reveal rounded-xl p-5 bg-white ledger-bg" style="border:1px solid '+C.paperDark+'">'+
-          '<h3 class="font-semibold text-sm mb-4" style="color:'+C.ink+'">Investment Ledger</h3>'+
-          '<div class="space-y-1">'+
-            items.map(function(it){return'<div class="flex items-center justify-between py-2 border-b" style="border-color:'+C.paperDark+'"><div class="flex-1 min-w-0 pr-3"><div class="text-xs font-medium" style="color:'+C.ink+'">'+it.label+'</div><div class="text-[10px]" style="color:'+C.inkSoft+'">'+it.bn+'</div></div><div class="tabular text-right shrink-0"><span class="text-xs mr-1" style="color:'+C.inkSoft+'">'+(it.pos?"+":"−")+'</span><span class="font-semibold text-sm" style="color:'+it.color+'">'+taka(it.value)+'</span></div></div>'}).join("")+
-          '</div>'+
-          '<div class="flex items-center justify-between mt-4 pt-4 border-t-2" style="border-color:'+C.marigold+'"><div><div class="text-xs font-semibold" style="color:'+C.ink+'">NET INVESTMENT</div><div class="text-[10px]" style="color:'+C.inkSoft+'">নেট মোট বিনিয়োগ</div></div><div class="tabular text-right"><div class="text-xl font-bold" style="color:'+C.marigold+'">'+taka(ic.total)+'</div></div></div>'+
-        '</div>'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-3" style="color:'+C.ink+'">Asset Allocation</h3><div id="chartInvCalc" style="height:300px;width:100%"></div></div>'+
-      '</div>'+
-      '<button onclick="window.__openModal(\'assets\')" class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-xs font-semibold text-white" style="background:'+C.navy+'">'+svgIcon("M12 4v16m8-8H4",14)+' Update Asset Values</button>';
-  }
-  function renderInvestmentChart(){
-    var ic=L.investment(state.data);
-    chartInit("chartInvCalc",{
-      tooltip:{trigger:"item",backgroundColor:"#fff",borderColor:C.paperDark,textStyle:{color:C.ink},formatter:function(p){return p.name+": "+taka(p.value)}},
-      series:[{type:"pie",radius:["40%","72%"],center:["50%","50%"],avoidLabelOverlap:true,itemStyle:{borderRadius:5,borderColor:"#fff",borderWidth:2},label:{show:true,position:"outside",fontSize:10,color:C.ink,formatter:"{b}\n{d}%"},
-        data:[
-          {name:"Inventory",value:ic.inventory,itemStyle:{color:C.green}},
-          {name:"Receivable",value:ic.receivable,itemStyle:{color:C.brick}},
-          {name:"Security",value:ic.security,itemStyle:{color:C.navy}},
-          {name:"Transport",value:ic.transport,itemStyle:{color:C.navyLight}},
-          {name:"Advance",value:ic.advance,itemStyle:{color:C.greenLight}},
-          {name:"Others",value:ic.freeDiscount+ic.pendingBills,itemStyle:{color:C.marigold}}
-        ]}]
-    });
-  }
-
-  /* ===== CLAIMS ===== */
-  function renderClaims(){
-    var d=state.data;
-    return pageHeader("Supplier Claims","ক্লেইম ম্যানেজমেন্ট",d.claims.length,"window.__openModal('claim')","New Claim")+
-      '<div class="grid grid-cols-3 gap-3 mb-4">'+
-        ["Pending","Approved","Rejected"].map(function(st){var col=st==="Approved"?C.green:(st==="Rejected"?C.brick:C.marigold);var tot=d.claims.filter(function(c){return c.status===st}).reduce(function(s,c){return s+c.value},0);return'<div class="rounded-lg p-3 bg-white" style="border:1px solid '+C.paperDark+';border-top:3px solid '+col+'"><div class="text-[10px] uppercase tracking-wide" style="color:'+C.inkSoft+'">'+st+'</div><div class="tabular text-lg font-bold" style="color:'+col+'">'+taka(tot)+'</div></div>'}).join("")+
-      '</div>'+
-      '<div class="rounded-xl bg-white overflow-hidden" style="border:1px solid '+C.paperDark+'"><div id="claimList">'+renderClaimRows(d.claims.slice().reverse())+'</div></div>';
-  }
-  function renderClaimRows(list){
-    var d=state.data;
-    return list.map(function(c,i){var sup=d.suppliers.find(function(s){return s.id===c.supplierId});var prod=d.products.find(function(p){return p.sku===c.sku});var col=c.status==="Approved"?C.green:(c.status==="Rejected"?C.brick:C.marigold);return'<div class="flex items-center justify-between px-5 py-4" style="border-top:'+(i?'1px dashed '+C.paperDark:"none")+'"><div class="min-w-0 flex-1"><div class="font-medium text-sm truncate" style="color:'+C.ink+'">'+(sup?sup.name:c.supplierId)+'</div><div class="text-xs truncate" style="color:'+C.inkSoft+'">'+(prod?prod.name:c.sku)+(c.freeQty?' · Free:'+c.freeQty:"")+(c.discount?' · Disc:'+taka(c.discount):"")+'</div></div><div class="text-right shrink-0 ml-3"><div class="tabular text-sm font-bold" style="color:'+C.ink+'">'+taka(c.value)+'</div><button data-claim="'+c.id+'" class="claim-btn badge mt-1" style="background:'+col+'18;color:'+col+'">'+c.status+'</button></div></div>'}).join("");
-  }
-
-  /* ===== SETTINGS / BACKUP ===== */
-  function renderSettings(){
-    var d=state.data;
-    return pageHeader("Backup & Settings","ব্যাকআপ ও সেটিংস")+
-      '<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+C.green+'15;color:'+C.green+'">'+svgIcon("M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3",20)+'</div><div><h3 class="font-semibold text-sm" style="color:'+C.ink+'">Export Backup</h3><p class="text-[11px]" style="color:'+C.inkSoft+'">Download all data as JSON file</p></div></div><button onclick="window.__exportBackup()" class="w-full py-2.5 rounded-lg text-xs font-semibold text-white" style="background:'+C.green+'">Download Backup File</button></div>'+
-        '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+C.marigold+'15;color:'+C.marigold+'">'+svgIcon("M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12",20)+'</div><div><h3 class="font-semibold text-sm" style="color:'+C.ink+'">Import / Restore</h3><p class="text-[11px]" style="color:'+C.inkSoft+'">Restore from backup JSON file</p></div></div><input type="file" id="importFile" accept=".json" class="hidden"/><button onclick="document.getElementById(\'importFile\').click()" class="w-full py-2.5 rounded-lg text-xs font-semibold text-white" style="background:'+C.marigold+'">Select Backup File</button></div>'+
-      '</div>'+
-      '<div class="reveal rounded-xl p-5 bg-white mb-5" style="border:1px solid '+C.paperDark+'"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background:'+C.brick+'15;color:'+C.brick+'">'+svgIcon("M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z",20)+'</div><div><h3 class="font-semibold text-sm" style="color:'+C.ink+'">Reset to Demo Data</h3><p class="text-[11px]" style="color:'+C.inkSoft+'">Warning: This will erase all your current data</p></div></div><button onclick="if(confirm(\'Are you sure? All data will be erased!\')){localStorage.removeItem(\''+SK+'\');state.data=loadData();render();}" class="w-full py-2.5 rounded-lg text-xs font-semibold text-white" style="background:'+C.brick+'">Reset System</button></div>'+
-      '<div class="reveal rounded-xl p-5 bg-white" style="border:1px solid '+C.paperDark+'"><h3 class="font-semibold text-sm mb-3" style="color:'+C.ink+'">📱 Android App (PWA) Installation</h3><ol class="text-xs space-y-2" style="color:'+C.ink+'"><li><strong>Step 1:</strong> Save this HTML file as <code class="px-1.5 py-0.5 rounded" style="background:'+C.paperDark+'">SamiraDMS.html</code></li><li><strong>Step 2:</strong> Open it in Chrome on your Android phone</li><li><strong>Step 3:</strong> Tap browser menu (⋮) → <strong>"Add to Home screen"</strong></li><li><strong>Step 4:</strong> Name it "Samira DMS" → Tap Add</li><li><strong>Step 5:</strong> A new app icon appears on your home screen — works offline!</li></ol><div class="mt-4 p-3 rounded-lg text-[11px]" style="background:'+C.green+'10;color:'+C.green+'"><strong>Online Sync:</strong> For multi-device sync, host this file on any web server (Netlify/Vercel/cPanel) with a backend API. Contact developer for server deployment.</div></div>';
-  }
-
-  /* ========== MODAL ========== */
-  function ic(){return'w-full px-3 py-2.5 rounded-lg border outline-none text-sm';}
-  function is_(){return'border-color:'+C.paperDark+';background:white';}
-  function fld(lbl,html){return'<div class="mb-3.5"><label class="block text-[11px] font-semibold mb-1.5" style="color:'+C.inkSoft+'">'+lbl+'</label>'+html+'</div>';}
-  function hdr(t){return'<div class="flex items-center justify-between px-5 py-4 border-b sticky top-0 bg-white z-10" style="border-color:'+C.paperDark+'"><h3 class="font-semibold text-sm" style="color:'+C.ink+'">'+t+'</h3><button onclick="window.__closeModal()" class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100" style="color:'+C.inkSoft+'">'+svgIcon("M18 6L6 18M6 6l12 12",18)+'</button></div><div class="p-5">';}
-  function ftr(lbl){return'<button onclick="window.__submit()" class="w-full py-3 rounded-lg text-sm font-semibold text-white mt-1" style="background:'+C.green+'">'+lbl+'</button></div>';}
-
-  function renderModal(){
-    if(!state.modal)return'<div class="p-6 text-xs" style="color:'+C.inkSoft+'">Closed</div>';
-    var d=state.data,title="",body="";
-    switch(state.modal){
-      case"product":title="Add New Product";body=hdr(title)+
-        fld("Product Name",'<input id="f_name" class="'+ic()+'" style="'+is_()+'"/>')+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Category",'<input id="f_cat" class="'+ic()+'" style="'+is_()+'"/>')+fld("Brand",'<input id="f_brand" class="'+ic()+'" style="'+is_()+'"/>')+'</div>'+
-        fld("Supplier",'<select id="f_sup" class="'+ic()+'" style="'+is_()+'">'+d.suppliers.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>'}).join("")+'</select>')+
-        '<div class="grid grid-cols-3 gap-3">'+fld("Unit",'<input id="f_unit" class="'+ic()+'" style="'+is_()+'" value="pcs"/>')+fld("Cost (৳)",'<input id="f_cost" type="number" class="'+ic()+'" style="'+is_()+'"/>')+fld("Price (৳)",'<input id="f_price" type="number" class="'+ic()+'" style="'+is_()+'"/>')+'</div>'+
-        fld("Opening Stock",'<input id="f_open" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+ftr("Save Product");break;
-      case"supplier":title="Add New Supplier";body=hdr(title)+fld("Supplier Name",'<input id="f_name" class="'+ic()+'" style="'+is_()+'"/>')+fld("Contact Person",'<input id="f_contact" class="'+ic()+'" style="'+is_()+'"/>')+fld("Phone",'<input id="f_phone" class="'+ic()+'" style="'+is_()+'"/>')+fld("Opening Payable Balance",'<input id="f_open" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+ftr("Save Supplier");break;
-      case"subdb":title="Add New Sub DB";body=hdr(title)+fld("Business Name",'<input id="f_name" class="'+ic()+'" style="'+is_()+'"/>')+fld("Area",'<input id="f_area" class="'+ic()+'" style="'+is_()+'"/>')+fld("Phone",'<input id="f_phone" class="'+ic()+'" style="'+is_()+'"/>')+fld("Opening Receivable",'<input id="f_open" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+ftr("Save Sub DB");break;
-      case"customer":title="Add New Customer";body=hdr(title)+fld("Shop Name",'<input id="f_shop" class="'+ic()+'" style="'+is_()+'"/>')+fld("Owner Name",'<input id="f_name" class="'+ic()+'" style="'+is_()+'"/>')+fld("Area",'<input id="f_area" class="'+ic()+'" style="'+is_()+'"/>')+fld("Phone",'<input id="f_phone" class="'+ic()+'" style="'+is_()+'"/>')+fld("Credit Limit (৳)",'<input id="f_limit" type="number" class="'+ic()+'" style="'+is_()+'" value="30000"/>')+fld("Opening Due",'<input id="f_open" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+ftr("Save Customer");break;
-      case"order":title="New Order Entry";body=hdr(title)+
-        fld("Customer",'<select id="f_cust" class="'+ic()+'" style="'+is_()+'">'+d.customers.map(function(c){return'<option value="'+c.id+'">'+c.shop+'</option>'}).join("")+'</select>')+
-        fld("Product",'<select id="f_sku" class="'+ic()+'" style="'+is_()+'">'+d.products.map(function(p){return'<option value="'+p.sku+'">'+p.name+' — '+taka(p.price)+'</option>'}).join("")+'</select>')+
-        '<div id="stockInfo" class="text-[11px] mb-3 -mt-2" style="color:'+C.inkSoft+'"></div>'+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Quantity",'<input id="f_qty" type="number" class="'+ic()+'" style="'+is_()+'" value="1"/>')+fld("Free Qty",'<input id="f_free" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+'</div>'+
-        fld("Discount (৳)",'<input id="f_disc" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+
-        fld("Status",'<select id="f_status" class="'+ic()+'" style="'+is_()+'"><option>Pending</option><option>Approved</option><option>Delivered</option></select>')+
-        '<div class="rounded-lg px-4 py-3 mb-3 flex justify-between items-center" style="background:'+C.paperDark+'"><span class="text-xs" style="color:'+C.inkSoft+'">Order Total</span><span id="ordTotal" class="tabular text-lg font-bold" style="color:'+C.green+'">৳0</span></div>'+ftr("Save Order");break;
-      case"dsr":title="DSR Daily Settlement";body=hdr(title)+
-        fld("DSR Name",'<input id="f_dsr" class="'+ic()+'" style="'+is_()+'" value="'+state.user.name+'"/>')+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Stock Out Value",'<input id="f_so" type="number" class="'+ic()+'" style="'+is_()+'"/>')+fld("Return Fresh",'<input id="f_rf" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+'</div>'+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Return Damage",'<input id="f_rd" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+fld("Free Products Value",'<input id="f_fr" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+'</div>'+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Discount",'<input id="f_dc" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+fld("Expenses",'<input id="f_ex" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+'</div>'+
-        fld("Customer Due",'<input id="f_cd" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+
-        '<div class="rounded-lg px-4 py-3 mb-3 flex justify-between items-center" style="background:'+C.paperDark+'"><span class="text-xs" style="color:'+C.inkSoft+'">Net Payable by DSR</span><span id="dsrNet" class="tabular text-lg font-bold" style="color:'+C.green+'">৳0</span></div>'+ftr("Save Settlement");break;
-      case"collection":title="New Collection Entry";body=hdr(title)+
-        fld("Customer",'<select id="f_cust" class="'+ic()+'" style="'+is_()+'">'+d.customers.map(function(c){return'<option value="'+c.id+'">'+c.shop+'</option>'}).join("")+'</select>')+
-        '<div id="custDue" class="text-[11px] mb-3 -mt-2" style="color:'+C.inkSoft+'"></div>'+
-        fld("Amount (৳)",'<input id="f_amt" type="number" class="'+ic()+'" style="'+is_()+'"/>')+
-        fld("Method",'<select id="f_method" class="'+ic()+'" style="'+is_()+'"><option>Cash</option><option>bKash</option><option>Nagad</option><option>Bank</option><option>Cheque</option></select>')+ftr("Save Collection");break;
-      case"claim":title="New Supplier Claim";body=hdr(title)+
-        fld("Supplier",'<select id="f_sup" class="'+ic()+'" style="'+is_()+'">'+d.suppliers.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>'}).join("")+'</select>')+
-        fld("Product",'<select id="f_sku" class="'+ic()+'" style="'+is_()+'">'+d.products.map(function(p){return'<option value="'+p.sku+'">'+p.name+'</option>'}).join("")+'</select>')+
-        '<div class="grid grid-cols-2 gap-3">'+fld("Free Qty",'<input id="f_free" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+fld("Discount (৳)",'<input id="f_disc" type="number" class="'+ic()+'" style="'+is_()+'" value="0"/>')+'</div>'+
-        '<div class="rounded-lg px-4 py-3 mb-3 flex justify-between items-center" style="background:'+C.paperDark+'"><span class="text-xs" style="color:'+C.inkSoft+'">Claim Value</span><span id="claimVal" class="tabular text-lg font-bold" style="color:'+C.brick+'">৳0</span></div>'+ftr("Submit Claim");break;
-      case"assets":title="Update Asset Values";body=hdr(title)+
-        fld("Security Deposit (৳)",'<input id="f_sec" type="number" class="'+ic()+'" style="'+is_()+'" value="'+(d.assets.securityDeposit||0)+'"/>')+
-        fld("Transport & Fixed Assets (৳)",'<input id="f_tr" type="number" class="'+ic()+'" style="'+is_()+'" value="'+(d.assets.transportAssets||0)+'"/>')+
-        fld("Office Advance (৳)",'<input id="f_off" type="number" class="'+ic()+'" style="'+is_()+'" value="'+(d.assets.officeAdvance||0)+'"/>')+
-        fld("Godown Advance (৳)",'<input id="f_gd" type="number" class="'+ic()+'" style="'+is_()+'" value="'+(d.assets.godownAdvance||0)+'"/>')+
-        fld("Pending / Unapproved Bills (৳)",'<input id="f_pb" type="number" class="'+ic()+'" style="'+is_()+'" value="'+(d.assets.pendingBills||0)+'"/>')+ftr("Save Asset Values");break;
-    }
-    return body;
-  }
-  window.__closeModal=function(){state.modal=null;state.modalData={};render();};
-  window.__openModal=function(m){state.modal=m;state.modalData={};render();};
-
-  function bindModal(){
-    if(!state.modal)return;
-    var d=state.data;
-    function g(id){var e=document.getElementById(id);return e?e.value:"";}
-    function gn(id){return Number(g(id))||0;}
-
-    if(state.modal==="order"){
-      var sku=document.getElementById("f_sku"),qty=document.getElementById("f_qty"),disc=document.getElementById("f_disc"),tot=document.getElementById("ordTotal"),si=document.getElementById("stockInfo");
-      function upd(){var p=d.products.find(function(x){return x.sku===sku.value});var s=L.stock(d,p.sku);si.textContent="Available stock: "+s+" "+p.unit;si.style.color=s<5?C.brick:C.inkSoft;var q=Number(qty.value)||0,dc=Number(disc.value)||0;tot.textContent=taka(Math.max(0,q*p.price-dc));}
-      sku.onchange=upd;qty.oninput=upd;disc.oninput=upd;upd();
-    }
-    if(state.modal==="dsr"){
-      ["f_so","f_rf","f_rd","f_fr","f_dc","f_ex","f_cd"].forEach(function(id){var el=document.getElementById(id);if(el)el.oninput=updDSR;});
-      function updDSR(){var n=L.dsrSettlement(gn("f_so"),gn("f_rf"),gn("f_rd"),gn("f_fr"),gn("f_dc"),gn("f_ex"),gn("f_cd"));var el=document.getElementById("dsrNet");if(el){el.textContent=taka(n);el.style.color=n<0?C.brick:C.green;}}
-      updDSR();
-    }
-    if(state.modal==="collection"){
-      var cust=document.getElementById("f_cust"),due=document.getElementById("custDue");
-      function upd(){var c=d.customers.find(function(x){return x.id===cust.value});due.textContent="Current due: "+taka(L.customerDue(d,c.id));}
-      cust.onchange=upd;upd();
-    }
-    if(state.modal==="claim"){
-      var sku=document.getElementById("f_sku"),fr=document.getElementById("f_free"),dc=document.getElementById("f_disc"),cv=document.getElementById("claimVal");
-      function upd(){var p=d.products.find(function(x){return x.sku===sku.value});var f=Number(fr.value)||0,dd=Number(dc.value)||0;cv.textContent=taka(f*(p?p.cost:0)+dd);}
-      sku.onchange=upd;fr.oninput=upd;dc.oninput=upd;upd();
-    }
-    /* Search */
-    onQ("searchInv",function(q){document.getElementById("invBody").innerHTML=renderInvRows(d.products.filter(function(p){return(p.name+p.brand+p.cat).toLowerCase().includes(q.toLowerCase())}));});
-    onQ("searchSup",function(q){document.getElementById("supList").innerHTML=renderSupRows(d.suppliers.filter(function(s){return s.name.toLowerCase().includes(q.toLowerCase())}));});
-    onQ("searchCust",function(q){document.getElementById("custList").innerHTML=renderCustRows(d.customers.filter(function(c){return(c.shop+c.name).toLowerCase().includes(q.toLowerCase())}));});
-    onQ("searchOrd",function(q){var ql=q.toLowerCase();document.getElementById("ordBody").innerHTML=renderOrdRows(d.orders.slice().reverse().filter(function(o){var c=d.customers.find(function(x){return x.id===o.customerId});return o.id.toLowerCase().includes(ql)||(c&&c.shop.toLowerCase().includes(ql));}));});
-    /* Status cycle */
-    document.querySelectorAll(".status-btn").forEach(function(b){b.onclick=function(){var id=b.dataset.ord;var o=d.orders.find(function(x){return x.id===id});if(!o)return;var flow={Pending:"Approved",Approved:"Delivered",Delivered:"Pending"};o.status=flow[o.status];log(d,state.user.name,"Order "+o.id+" → "+o.status,state.user.roleLabel);render();};});
-    document.querySelectorAll(".claim-btn").forEach(function(b){b.onclick=function(){var id=b.dataset.claim;var c=d.claims.find(function(x){return x.id===id});if(!c)return;var flow={Pending:"Approved",Approved:"Rejected",Rejected:"Pending"};c.status=flow[c.status];log(d,state.user.name,"Claim "+c.id+" → "+c.status,state.user.roleLabel);render();};});
-    /* Import */
-    var imp=document.getElementById("importFile");if(imp)imp.onchange=function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){try{var data=JSON.parse(ev.target.result);state.data=data;saveData(data);alert("Backup restored successfully!");render();}catch(err){alert("Invalid backup file!");}};r.readAsText(f);};
-  }
-  function onQ(id,fn){var el=document.getElementById(id);if(!el)return;el.oninput=function(){fn(el.value);};}
-
-  /* ========== SUBMIT ========== */
-  window.__submit=function(){
-    var d=state.data;
-    function g(id){var e=document.getElementById(id);return e?e.value:"";}
-    function gn(id){return Number(g(id))||0;}
-    try{
-      switch(state.modal){
-        case"product":
-          if(!g("f_name").trim()||!gn("f_price"))return alert("Please fill product name and price");
-          d.products.push({sku:nextId(d.products.map(function(p){return{id:p.sku}}),"P"),name:g("f_name").trim(),cat:g("f_cat").trim(),brand:g("f_brand").trim(),supplierId:g("f_sup"),unit:g("f_unit")||"pcs",cost:gn("f_cost"),price:gn("f_price"),opening:gn("f_open")});
-          log(d,state.user.name,"Added product: "+g("f_name").trim(),state.user.roleLabel);break;
-        case"supplier":
-          if(!g("f_name").trim())return alert("Please fill supplier name");
-          d.suppliers.push({id:nextId(d.suppliers,"S"),name:g("f_name").trim(),contact:g("f_contact").trim(),phone:g("f_phone").trim(),opening:gn("f_open")});
-          log(d,state.user.name,"Added supplier: "+g("f_name").trim(),state.user.roleLabel);break;
-        case"subdb":
-          if(!g("f_name").trim())return alert("Please fill business name");
-          d.subdb.push({id:nextId(d.subdb,"DB"),name:g("f_name").trim(),area:g("f_area").trim(),phone:g("f_phone").trim(),opening:gn("f_open")});
-          log(d,state.user.name,"Added Sub DB: "+g("f_name").trim(),state.user.roleLabel);break;
-        case"customer":
-          if(!g("f_shop").trim())return alert("Please fill shop name");
-          d.customers.push({id:nextId(d.customers,"C"),name:g("f_name").trim(),shop:g("f_shop").trim(),area:g("f_area").trim(),phone:g("f_phone").trim(),creditLimit:gn("f_limit"),opening:gn("f_open")});
-          log(d,state.user.name,"Added customer: "+g("f_shop").trim(),state.user.roleLabel);break;
-        case"order":
-          var p=d.products.find(function(x){return x.sku===g("f_sku")});var q=gn("f_qty");if(!p||q<=0)return alert("Invalid product or quantity");
-          var cust=d.customers.find(function(c){return c.id===g("f_cust")});
-          d.orders.push({id:nextId(d.orders,"ORD"),date:todayISO(),customerId:g("f_cust"),sku:p.sku,supplierId:p.supplierId,qty:q,freeQty:gn("f_free"),price:p.price,discount:gn("f_disc"),status:g("f_status"),srId:state.user.role==="sr"?state.user.name:"SR-001",dsrId:"DSR-001"});
-          log(d,state.user.name,"Created order "+nextId(d.orders,"ORD").replace(/\d+$/,function(m){return String(parseInt(m)-1).padStart(4,"0")}),state.user.roleLabel);break;
-        case"dsr":
-          if(!g("f_dsr").trim()||!gn("f_so"))return alert("Please fill DSR name and stock out value");
-          var so=gn("f_so"),rf=gn("f_rf"),rd=gn("f_rd"),fv=gn("f_fr"),dc=gn("f_dc"),ex=gn("f_ex"),cd=gn("f_cd");
-          var np=L.dsrSettlement(so,rf,rd,fv,dc,ex,cd);
-          var sid="DSR-"+todayISO().replace(/-/g,"");
-          d.dsrSettlements.push({id:sid,date:todayISO(),dsrId:"DSR-001",dsrName:g("f_dsr").trim(),stockOutValue:so,returnsFresh:rf,returnsDamage:rd,freeValue:fv,discount:dc,expenses:ex,customerDue:cd,netPayable:np,status:"Settled"});
-          log(d,state.user.name,"DSR Settlement: "+g("f_dsr").trim()+" → "+taka(np),state.user.roleLabel);break;
-        case"collection":
-          var c=d.customers.find(function(x){return x.id===g("f_cust")});var am=gn("f_amt");if(!c||am<=0)return alert("Invalid customer or amount");
-          d.collections.push({id:nextId(d.collections,"COL"),date:todayISO(),customerId:c.id,amount:am,method:g("f_method"),collectedBy:state.user.name});
-          log(d,state.user.name,"Collected "+taka(am)+" from "+c.shop,state.user.roleLabel);break;
-        case"claim":
-          var p2=d.products.find(function(x){return x.sku===g("f_sku")});var fq=gn("f_free"),dc2=gn("f_disc");var val=fq*(p2?p2.cost:0)+dc2;if(val<=0)return alert("Claim value must be > 0");
-          d.claims.push({id:nextId(d.claims,"CLM"),date:todayISO(),supplierId:g("f_sup"),sku:g("f_sku"),freeQty:fq,discount:dc2,value:val,status:"Pending"});
-          log(d,state.user.name,"Claim submitted: "+taka(val),state.user.roleLabel);break;
-        case"assets":
-          d.assets.securityDeposit=gn("f_sec");d.assets.transportAssets=gn("f_tr");d.assets.officeAdvance=gn("f_off");d.assets.godownAdvance=gn("f_gd");d.assets.pendingBills=gn("f_pb");
-          log(d,state.user.name,"Updated asset values",state.user.roleLabel);break;
-      }
-      saveData(d);state.modal=null;state.modalData={};render();
-    }catch(e){alert("Error: "+e.message);}
-  };
-
-  /* ========== BACKUP EXPORT ========== */
-  window.__exportBackup=function(){
-    var dataStr=JSON.stringify(state.data,null,2);
-    var blob=new Blob([dataStr],{type:"application/json"});
-    var url=URL.createObjectURL(blob);
-    var a=document.createElement("a");
-    a.href=url;a.download="SamiraDMS-Backup-"+todayISO()+".json";
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    log(state.data,state.user.name,"Exported backup file",state.user.roleLabel);
-  };
-
-  /* ========== INIT ========== */
-  render();
-})();
+  localStorage.setItem('lastSettlement', JSON.stringify(data));
+  alert('Save হয়েছে! এখন Print হবে');
+  window.print();
+}
 </script>
+</body>
 </html>
